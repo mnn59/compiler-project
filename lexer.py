@@ -5,10 +5,14 @@ from ply.lex import TOKEN
 class Lexer:
     # LRB: ( , RRB: ) , LCB: { , RCB: } , LT: < , GT: >
     tokens = [
-        'IF', 'WHILE', 'PRINT',
-        'LRB', 'RRB', 'LCB', 'RCB',
-        'INTEGER', 'SUM', 'SUB', 'MUL', 'DIV',
-        'LT', 'GT', 'SEMICOLON'
+        'ID', 'INTEGERNUMBER', 'FLOATNUMBER', 'INTEGER', 'FLOAT',
+        'BOOLEAN', 'FUNCTION', 'TRUE', 'FALSE', 'PRINT', 'RETURN',
+        'MAIN', 'IF', 'ELSE', 'ELSEIF', 'WHILE', 'ON', 'WHERE',
+        'FOR', 'AND', 'OR', 'NOT', 'IN', 'ASSIGN',
+        'SUM', 'SUB', 'MUL', 'DIV', 'MOD',
+        'GT', 'GE', 'LT', 'LE', 'EQ', 'NE',
+        'LCB', 'RCB', 'LRB', 'RRB', 'LSB', 'RSB',
+        'SEMICOLON', 'COLON', 'COMMA', 'ERROR'
     ]
 
     # COLONS
