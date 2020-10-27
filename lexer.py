@@ -15,6 +15,14 @@ class Lexer:
         'SEMICOLON', 'COLON', 'COMMA', 'ERROR'
     ]
 
+    reserved = {
+        'int': "INTEGER",
+        'float': "FLOAT",
+        'bool': "BOOLEAN",
+        'true': "TRUE",
+        'false': "FALSE",
+    }
+
     # COLONS
     t_SEMICOLON = r'\;'
     # BRACKETS
