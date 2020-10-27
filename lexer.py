@@ -39,7 +39,6 @@ class Lexer:
         'on': "ON",
         'in': "IN",
         'where': "WHERE",
-
     }
 
     # COMPARISON
@@ -86,6 +85,12 @@ class Lexer:
         # r'\#[-\+]?([1-9]\d*|0)'      # for robati
 
         # r'[-|+]?(\d+)'
+        return t
+
+    def t_ID(self, t):
+        r'[a-z_][a-zA-Z0-9_]*'
+        if t.value in self.reserved:
+            t.type = self.reserved[t.value]
         return t
 
     def t_newline(self, t):
