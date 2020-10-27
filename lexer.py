@@ -42,11 +42,13 @@ class Lexer:
 
     }
 
+    # COMPARISON
     t_AND = r'\&\&'
-    t_ASSIGN = r'\='
-
+    t_OR = r'\|\|'
+    t_NOT = r'\!'
     # COLONS
     t_SEMICOLON = r'\;'
+    t_COLON = r'\:'
     # BRACKETS
     t_LRB = r'\('
     t_RRB = r'\)'
