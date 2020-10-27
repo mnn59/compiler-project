@@ -16,12 +16,34 @@ class Lexer:
     ]
 
     reserved = {
+        # TYPES
         'int': "INTEGER",
         'float': "FLOAT",
         'bool': "BOOLEAN",
-        'true': "TRUE",
-        'false': "FALSE",
+        # LOOPS
+        'while': "WHILE",
+        'for': "FOR",
+        # CONDITIONAL
+        'if': "IF",
+        'else': "ELSE",
+        'elseif': "ELSEIF",
+        # BOOLEAN
+        'True': "TRUE",
+        'False': "FALSE",
+        # Other
+        'print': "PRINT",
+        'return': "RETURN",
+        'main': "MAIN",
+        'Function': "Function",
+        'fun': "Function",
+        'on': "ON",
+        'in': "IN",
+        'where': "WHERE",
+
     }
+
+    t_AND = r'\&\&'
+    t_ASSIGN = r'\='
 
     # COLONS
     t_SEMICOLON = r'\;'
