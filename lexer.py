@@ -1,17 +1,9 @@
 from ply import lex
 from ply.lex import TOKEN
 
-'''
-if (002 + 13>(42*2) + 5) {
-    while (3 < 4/7 - 5) {
-        print(3);
-    }
-}
-'''
 
 class Lexer:
     # LRB: ( , RRB: ) , LCB: { , RCB: } , LT: < , GT: >
-    # new line
     tokens = [
         'IF', 'WHILE', 'PRINT',
         'LRB', 'RRB', 'LCB', 'RCB',
