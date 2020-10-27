@@ -2,4 +2,13 @@ if (002 + 13>(42*2) + 5) {
     while (3 < 4/7 - 5) {
         print(3);
     }
+    0x+00200
+    009
+    c++;
+    while()
+    _x-+-_x
+    and or -
+    5 if
+    elseif
+    amir=mohammad + 225511390900
 }
