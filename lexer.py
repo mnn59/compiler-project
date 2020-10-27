@@ -65,6 +65,12 @@ class Lexer:
     t_WHILE = r'while'
     t_PRINT = r'print'
 
+
+    def t_INTEGERNUMBER(self, t):
+        r'[0-9]{1,9}'
+        t.value = int(t.value)
+        return t
+
     # digit = r'([1-9])'
     # zero = r'([0])'
     # var = r'(' + digit + r'(' + digit + r'|' + zero + r')*)'
