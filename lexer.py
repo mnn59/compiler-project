@@ -39,14 +39,15 @@ class Lexer:
         'on': "ON",
         'in': "IN",
         'where': "WHERE",
-
     }
 
+    # COMPARISON
     t_AND = r'\&\&'
-    t_ASSIGN = r'\='
-
+    t_OR = r'\|\|'
+    t_NOT = r'\!'
     # COLONS
     t_SEMICOLON = r'\;'
+    t_COLON = r'\:'
     # BRACKETS
     t_LRB = r'\('
     t_RRB = r'\)'
@@ -63,6 +64,12 @@ class Lexer:
     t_IF = r'if'
     t_WHILE = r'while'
     t_PRINT = r'print'
+
+
+    def t_INTEGERNUMBER(self, t):
+        r'[0-9]{1,9}'
+        t.value = int(t.value)
+        return t
 
     # digit = r'([1-9])'
     # zero = r'([0])'
@@ -84,6 +91,12 @@ class Lexer:
         # r'\#[-\+]?([1-9]\d*|0)'      # for robati
 
         # r'[-|+]?(\d+)'
+        return t
+
+    def t_ID(self, t):
+        r'[a-z_][a-zA-Z0-9_]*'
+        if t.value in self.reserved:
+            t.type = self.reserved[t.value]
         return t
 
     def t_newline(self, t):
