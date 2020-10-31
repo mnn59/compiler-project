@@ -1,7 +1,7 @@
 from lexer import Lexer
 
 lexer = Lexer().build()
-file = open('old-test.txt')
+file = open('test.txt')
 text_input = file.read()
 file.close()
 lexer.input(text_input)
