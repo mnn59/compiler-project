@@ -31,6 +31,10 @@ class Lexer:
         # BOOLEAN
         'True': "TRUE",
         'False': "FALSE",
+        # COMPARISON
+        'and': "AND",
+        'or': "OR",
+        'not': "NOT",
         # Other
         'print': "PRINT",
         'return': "RETURN",
@@ -47,10 +51,6 @@ class Lexer:
     # Todo eof  The lexpos attribute is reset so be aware of that if you're using it in error reporting.
     # Todo the order of definition of tokens should be edited
 
-    # COMPARISON
-    t_AND = r'\&\&'
-    t_OR = r'\|\|'
-    t_NOT = r'\!'
     # COLONS
     # t_SEMICOLON = r'\;'
     # t_COLON = r'\:'
