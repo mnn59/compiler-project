@@ -13,7 +13,7 @@ class Lexer:
         'SUM', 'SUB', 'MUL', 'DIV', 'MOD',
         'GT', 'GE', 'LT', 'LE', 'EQ', 'NE',
         'LCB', 'RCB', 'LRB', 'RRB', 'LSB', 'RSB',
-        'SEMICOLON', 'COLON', 'COMMA', 'ERROR', 'DOT'
+        'SEMICOLON', 'COLON', 'COMMA', 'ERROR'
     ]
 
     reserved = {
@@ -85,7 +85,7 @@ class Lexer:
     t_COLON = r'\:'
     t_COMMA = r'\,'
     # amir.haf76: there is extra token. it's '.'
-    t_DOT = r'\.'
+    # t_DOT = r'\.'
 
     literals = ['{', '}', '(', ')', '[', ']',
                 '*', '/', '%', '+', '-']
@@ -93,13 +93,19 @@ class Lexer:
     # amir.haf76: end defining new tokens
 
     # amir.haf76: adding float number, float number should be upper than integer number!!!
+
     def t_FLOATNUMBER(self, t):
-        r'(?<!\d)\+?\-?\d+\.\d+'
+        r'(?<!\d)[\+\-]?(?:0*[1-9]\d{0,8}|0*)\.\d+'
+        # r'(?<!\d)[\+\-]?\d{1,9}\.\d+'
+        # r'(?:(?<!\d)[\-\+]?)(?:[1-9]\d{0,8}|0)\.(?:0|\d*[1-9])'
+        # r'(?:(?<!\d)[\-\+]?)(?:[1-9]\d{0,8}|0)\.(?:0|\d*[1-9])|(?<=0)(?:[1-9]\d{0,8}|0)\.(?:0|\d*[1-9])'
         t.value = float(t.value)
         return t
 
     def t_INTEGERNUMBER(self, t):
         r'[0-9]{1,9}'
+        # Todo amir.haf76: its for like -78664. it needs to take minus
+        # r'(?<!\d)[\+\-]?\d+(?!\w|[.])'
         t.value = int(t.value)
         return t
 
@@ -143,8 +149,78 @@ class Lexer:
 
     # NOTE: t.value = lexeme  t.type = token
     # NOTE: it must be lower case 'error' not 'ERROR'
+
+    # expr1 = r'(\+|\-|\*|\/|\%)(\+|\-|\*|\/|\%)+'
+    # expr2 = list(reserved.values())
+    # for i in expr2:
+    #     expr1 += '|' + i
+    # @TOKEN(expr1)
+    def t_ERROR(self, t):
+        r'(?:\*|\/|\+|\-|\%)(?:\s+)?(?:\*|\/|\+|\-|\%)+|[a-zA-Z0-9_][a-zA-Z0-9_]*'
+        # if t.value not in self.reserved.keys():
+        #     print(t.value)
+        return t
+
+    # amir.haf76: I added this part for changing name
+    def t_LCB(self, t):
+        r'\{'
+        t.type = 'LCB'
+        return t
+
+    def t_RCB(self, t):
+        r'\}'
+        t.type = 'RCB'
+        return t
+
+    def t_LRB(self, t):
+        r'\('
+        t.type = 'LRB'
+        return t
+
+    def t_RRB(self, t):
+        r'\)'
+        t.type = 'RRB'
+        return t
+
+    def t_LSB(self, t):
+        r'\['
+        t.type = 'LSB'
+        return t
+
+    def t_RSB(self, t):
+        r'\]'
+        t.type = 'RSB'
+        return t
+
+    def t_SUM(self, t):
+        r'\+'
+        t.type = 'SUM'
+        return t
+
+    def t_SUB(self, t):
+        r'\-'
+        t.type = 'SUB'
+        return t
+
+    def t_MUL(self, t):
+        r'\*'
+        t.type = 'MUL'
+        return t
+
+    def t_MOD(self, t):
+        r'\%'
+        t.type = 'MOD'
+        return t
+
+    def t_DIV(self, t):
+        r'\/'
+        t.type = 'DIV'
+        return t
+
     def t_error(self, t):
-        raise Exception('Error at ', t.value)
+        t.value = t.value[0]
+        t.lexer.skip(1)
+        return t
 
     def build(self, **kwargs):
         self.lexer = lex.lex(self, **kwargs)
