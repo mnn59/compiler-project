@@ -55,17 +55,18 @@ class Lexer:
     # t_SEMICOLON = r'\;'
     # t_COLON = r'\:'
     # BRACKETS
-    # t_LRB = r'\('
-    # t_RRB = r'\)'
-    # t_LCB = r'\{'
-    # t_RCB = r'\}'
+    t_LRB = r'\('
+    t_RRB = r'\)'
+    t_LCB = r'\{'
+    t_RCB = r'\}'
     # OPERATOR
-    # t_SUM = r'\+'
-    # t_SUB = r'\-'
-    # t_MUL = r'\*'
-    # t_DIV = r'\/'
+    t_SUM = r'\+'
+    t_SUB = r'\-'
+    t_MUL = r'\*'
+    t_DIV = r'\/'
     # t_LT = r'\<'
     # t_GT = r'\>'
+
     # RESERVED KEYWORD
     t_IF = r'if'
     t_WHILE = r'while'
