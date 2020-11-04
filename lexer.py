@@ -42,8 +42,6 @@ class Lexer:
         'where': "WHERE",
     }
 
-    # Todo literals
-    # Todo newline
     # Todo eof  The lexpos attribute is reset so be aware of that if you're using it in error reporting.
     # Todo the order of definition of tokens should be edited
 
@@ -84,18 +82,15 @@ class Lexer:
     t_SEMICOLON = r'\;'
     t_COLON = r'\:'
     t_COMMA = r'\,'
-    # amir.haf76: there is extra token. it's '.'
-    # t_DOT = r'\.'
 
     literals = ['{', '}', '(', ')', '[', ']',
                 '*', '/', '%', '+', '-']
 
     # amir.haf76: end defining new tokens
 
-    # amir.haf76: adding float number, float number should be upper than integer number!!!
-
+    # amir.haf76: adding float number, float number should be upper than integer number!!
     def t_FLOATNUMBER(self, t):
-        r'(?<!\d)[\+\-]?(?:0*[1-9]\d{0,8}|0*)\.\d+'
+        r'(?<!\d|\w)[\+\-]?(?:0*[1-9]\d{0,8}|0+)\.\d+(?!\w|[.])'
         # r'(?<!\d)[\+\-]?\d{1,9}\.\d+'
         # r'(?:(?<!\d)[\-\+]?)(?:[1-9]\d{0,8}|0)\.(?:0|\d*[1-9])'
         # r'(?:(?<!\d)[\-\+]?)(?:[1-9]\d{0,8}|0)\.(?:0|\d*[1-9])|(?<=0)(?:[1-9]\d{0,8}|0)\.(?:0|\d*[1-9])'
@@ -103,33 +98,34 @@ class Lexer:
         return t
 
     def t_INTEGERNUMBER(self, t):
-        r'[0-9]{1,9}'
+        # r'[0-9]{1,9}'
         # Todo amir.haf76: its for like -78664. it needs to take minus
-        # r'(?<!\d)[\+\-]?\d+(?!\w|[.])'
+        r'(?<!(?:\d|\w))[\+\-]?\d+(?!\w|[.])'
         t.value = int(t.value)
         return t
 
+    # Todo it should be deleted.
     # digit = r'([1-9])'
     # zero = r'([0])'
     # var = r'(' + digit + r'(' + digit + r'|' + zero + r')*)'
     #
     # @TOKEN(var)
-    def t_INTEGER(self, t):
-        # for me
-        # r"""[+|-]?[1-9]([1-9]|[0])*"""
-        # t.value = int(t.value)
-
-        r"""[0-9]+"""
-        t.value = int(t.value)
-
-        # r"""[0-9]{1,9}"""
-        # t.value = int(t.value)
-
-        # r'((?!^0\d+)^0)|((?!0+)\d{1,10})'
-        # r'\#[-\+]?([1-9]\d*|0)'      # for robati
-
-        # r'[-|+]?(\d+)'
-        return t
+    # def t_INTEGER(self, t):
+    #     # for me
+    #     # r"""[+|-]?[1-9]([1-9]|[0])*"""
+    #     # t.value = int(t.value)
+    #
+    #     r"""[0-9]+"""
+    #     t.value = int(t.value)
+    #
+    #     # r"""[0-9]{1,9}"""
+    #     # t.value = int(t.value)
+    #
+    #     # r'((?!^0\d+)^0)|((?!0+)\d{1,10})'
+    #     # r'\#[-\+]?([1-9]\d*|0)'      # for robati
+    #
+    #     # r'[-|+]?(\d+)'
+    #     return t
 
     def t_ID(self, t):
         r'[a-z_][a-zA-Z0-9_]*'
@@ -140,23 +136,23 @@ class Lexer:
     # Define a rule so we can track line numbers
     def t_newline(self, t):
         r'\n+'
-        print(t.value)
         t.lexer.lineno += len(t.value)
 
     # characters that we want from lexer to skip theme
     # NOTE: it must be lower case 'ignore' not 'IGNORE'
-    t_ignore = '\n \t'
+    # NOTE: Don't ignore \n, because it's used in t_newline for getting number of line
+    t_ignore = ' \t'
 
     # NOTE: t.value = lexeme  t.type = token
     # NOTE: it must be lower case 'error' not 'ERROR'
 
-    # expr1 = r'(\+|\-|\*|\/|\%)(\+|\-|\*|\/|\%)+'
-    # expr2 = list(reserved.values())
-    # for i in expr2:
-    #     expr1 += '|' + i
-    # @TOKEN(expr1)
+    err_sign = r'(?:\*|\/|\+|\-|\%)(?:(?:\s+)?(?:\*|\/|\+|\-|\%))+'
+    err_id = r'(?:[0-9]+)?[a-zA-Z0-9_][a-zA-Z0-9_]*'
+    err_num = r'(?:\d+\.)(?:\d+\.)+(?:\d+)?'
+    err_genr = err_sign + r'|' + err_id + r'|' + err_num
+    @TOKEN(err_genr)
     def t_ERROR(self, t):
-        r'(?:\*|\/|\+|\-|\%)(?:\s+)?(?:\*|\/|\+|\-|\%)+|[a-zA-Z0-9_][a-zA-Z0-9_]*'
+        # r'(?:\*|\/|\+|\-|\%)(?:(?:\s+)?(?:\*|\/|\+|\-|\%))+|(?:[0-9]+)?[a-zA-Z0-9_][a-zA-Z0-9_]*|(?:\d+\.)(?:\d+\.)+(?:\d+)?'
         # if t.value not in self.reserved.keys():
         #     print(t.value)
         return t
