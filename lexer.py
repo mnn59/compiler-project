@@ -39,8 +39,8 @@ class Lexer:
         'print': "PRINT",
         'return': "RETURN",
         'main': "MAIN",
-        # 'Function': "Function",
-        'fun': "FUNCTION",
+        'Function': "Function",
+        'fun': "Function",
         'on': "ON",
         'in': "IN",
         'where': "WHERE",
@@ -88,8 +88,6 @@ class Lexer:
     # amir.haf76: there is extra token. it's '.'
     t_DOT = r'\.'
 
-    # t_FUNCTION = r'fun'
-
     literals = ['{', '}', '(', ')', '[', ']',
                 '*', '/', '%', '+', '-']
 
@@ -111,7 +109,6 @@ class Lexer:
     # var = r'(' + digit + r'(' + digit + r'|' + zero + r')*)'
     #
     # @TOKEN(var)
-    # it can be commented
     def t_INTEGER(self, t):
         # for me
         # r"""[+|-]?[1-9]([1-9]|[0])*"""
