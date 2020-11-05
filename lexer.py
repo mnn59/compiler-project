@@ -38,8 +38,7 @@ class Lexer:
         'print': "PRINT",
         'return': "RETURN",
         'main': "MAIN",
-        'Function': "Function",
-        'fun': "Function",
+        'fun': "FUNCTION",
         'on': "ON",
         'in': "IN",
         'where': "WHERE",
@@ -75,22 +74,18 @@ class Lexer:
     # amir.haf76: adding float number, float number should be upper than integer number!!
     def t_FLOATNUMBER(self, t):
         r'(?<!\d|\w)[\+\-]?(?:0*[1-9]\d{0,8}|0+)\.\d+(?!\w|[.])'
-        # r'(?<!\d)[\+\-]?\d{1,9}\.\d+'
-        # r'(?:(?<!\d)[\-\+]?)(?:[1-9]\d{0,8}|0)\.(?:0|\d*[1-9])'
-        # r'(?:(?<!\d)[\-\+]?)(?:[1-9]\d{0,8}|0)\.(?:0|\d*[1-9])|(?<=0)(?:[1-9]\d{0,8}|0)\.(?:0|\d*[1-9])'
         t.value = float(t.value)
         return t
 
     def t_INTEGERNUMBER(self, t):
         # r'[0-9]{1,9}'
-        # Todo amir.haf76: its for like -78664. it needs to take minus
-        r'(?<!(?:\d|\w))[\+\-]?\d+(?!\w|[.])'
+        r'(?<!(?:\d|\w))[\+\-]?\d{1,9}(?!\w|[.])'
         t.value = int(t.value)
         return t
 
     def t_ID(self, t):
-        r'[a-z_][a-zA-Z0-9_]*'
-        # Todo amir.haf76: LexToken(ID,'jjjgg444',12,126), jjjggg4444., '.' needs to be captured.
+        r'[a-z_][a-zA-Z0-9_]*|True|False'
+
         if t.value in self.reserved:
             t.type = self.reserved[t.value]
         return t
