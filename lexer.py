@@ -4,7 +4,6 @@ from ply.lex import TOKEN
 
 class Lexer:
     # LRB: ( , RRB: ) , LCB: { , RCB: } , LT: < , GT: >
-    # amir.haf76: there is DOT token
     tokens = [
         'ID', 'INTEGERNUMBER', 'FLOATNUMBER', 'INTEGER', 'FLOAT',
         'BOOLEAN', 'FUNCTION', 'TRUE', 'FALSE', 'PRINT', 'RETURN',
@@ -13,7 +12,7 @@ class Lexer:
         'SUM', 'SUB', 'MUL', 'DIV', 'MOD',
         'GT', 'GE', 'LT', 'LE', 'EQ', 'NE',
         'LCB', 'RCB', 'LRB', 'RRB', 'LSB', 'RSB',
-        'SEMICOLON', 'COLON', 'COMMA', 'ERROR', 'DOT'
+        'SEMICOLON', 'COLON', 'COMMA', 'ERROR'
     ]
 
     reserved = {
@@ -46,26 +45,8 @@ class Lexer:
         'where': "WHERE",
     }
 
-    # Todo literals
-    # Todo newline
     # Todo eof  The lexpos attribute is reset so be aware of that if you're using it in error reporting.
     # Todo the order of definition of tokens should be edited
-
-    # COLONS
-    # t_SEMICOLON = r'\;'
-    # t_COLON = r'\:'
-    # BRACKETS
-    t_LRB = r'\('
-    t_RRB = r'\)'
-    t_LCB = r'\{'
-    t_RCB = r'\}'
-    # OPERATOR
-    t_SUM = r'\+'
-    t_SUB = r'\-'
-    t_MUL = r'\*'
-    t_DIV = r'\/'
-    # t_LT = r'\<'
-    # t_GT = r'\>'
 
     # RESERVED KEYWORD
     t_IF = r'if'
@@ -81,53 +62,35 @@ class Lexer:
     t_GT = r'\>'
     t_LT = r'\<'
 
-    # COLONS
+    # COLONS, OPERATOR, BRACKETS
     t_SEMICOLON = r'\;'
     t_COLON = r'\:'
     t_COMMA = r'\,'
-    # amir.haf76: there is extra token. it's '.'
-    t_DOT = r'\.'
 
     literals = ['{', '}', '(', ')', '[', ']',
                 '*', '/', '%', '+', '-']
 
     # amir.haf76: end defining new tokens
 
-    # amir.haf76: adding float number, float number should be upper than integer number!!!
+    # amir.haf76: adding float number, float number should be upper than integer number!!
     def t_FLOATNUMBER(self, t):
-        r'(?<!\d)\+?\-?\d+\.\d+'
+        r'(?<!\d|\w)[\+\-]?(?:0*[1-9]\d{0,8}|0+)\.\d+(?!\w|[.])'
+        # r'(?<!\d)[\+\-]?\d{1,9}\.\d+'
+        # r'(?:(?<!\d)[\-\+]?)(?:[1-9]\d{0,8}|0)\.(?:0|\d*[1-9])'
+        # r'(?:(?<!\d)[\-\+]?)(?:[1-9]\d{0,8}|0)\.(?:0|\d*[1-9])|(?<=0)(?:[1-9]\d{0,8}|0)\.(?:0|\d*[1-9])'
         t.value = float(t.value)
         return t
 
     def t_INTEGERNUMBER(self, t):
-        r'[0-9]{1,9}'
+        # r'[0-9]{1,9}'
+        # Todo amir.haf76: its for like -78664. it needs to take minus
+        r'(?<!(?:\d|\w))[\+\-]?\d+(?!\w|[.])'
         t.value = int(t.value)
-        return t
-
-    # digit = r'([1-9])'
-    # zero = r'([0])'
-    # var = r'(' + digit + r'(' + digit + r'|' + zero + r')*)'
-    #
-    # @TOKEN(var)
-    def t_INTEGER(self, t):
-        # for me
-        # r"""[+|-]?[1-9]([1-9]|[0])*"""
-        # t.value = int(t.value)
-
-        r"""[0-9]+"""
-        t.value = int(t.value)
-
-        # r"""[0-9]{1,9}"""
-        # t.value = int(t.value)
-
-        # r'((?!^0\d+)^0)|((?!0+)\d{1,10})'
-        # r'\#[-\+]?([1-9]\d*|0)'      # for robati
-
-        # r'[-|+]?(\d+)'
         return t
 
     def t_ID(self, t):
         r'[a-z_][a-zA-Z0-9_]*'
+        # Todo amir.haf76: LexToken(ID,'jjjgg444',12,126), jjjggg4444., '.' needs to be captured.
         if t.value in self.reserved:
             t.type = self.reserved[t.value]
         return t
@@ -135,17 +98,86 @@ class Lexer:
     # Define a rule so we can track line numbers
     def t_newline(self, t):
         r'\n+'
-        print(t.value)
         t.lexer.lineno += len(t.value)
 
     # characters that we want from lexer to skip theme
     # NOTE: it must be lower case 'ignore' not 'IGNORE'
-    t_ignore = '\n \t'
+    # NOTE: Don't ignore \n, because it's used in t_newline for getting number of line
+    t_ignore = ' \t'
 
     # NOTE: t.value = lexeme  t.type = token
     # NOTE: it must be lower case 'error' not 'ERROR'
+
+    err_sign = r'(?:\*|\/|\+|\-|\%)(?:(?:\s+)?(?:\*|\/|\+|\-|\%))+'
+    err_id = r'(?:[0-9]+)?[a-zA-Z_][a-zA-Z0-9_]*'
+    # err_num = r'\.?(?:\d+\.)(?:\d+\.)+(?:\d+)?|(?:\d+\.)(?!\d+)|(?<!\d)(?:\.\d+)(?!\d+)'
+    err_num = r'(?:\w+|\d+|\.)+'
+    err_genr = err_sign + r'|' + err_num + r'|' + err_id
+    @TOKEN(err_genr)
+    def t_ERROR(self, t):
+
+        return t
+
+    # amir.haf76: I added this part for changing name
+    def t_LCB(self, t):
+        r'\{'
+        t.type = 'LCB'
+        return t
+
+    def t_RCB(self, t):
+        r'\}'
+        t.type = 'RCB'
+        return t
+
+    def t_LRB(self, t):
+        r'\('
+        t.type = 'LRB'
+        return t
+
+    def t_RRB(self, t):
+        r'\)'
+        t.type = 'RRB'
+        return t
+
+    def t_LSB(self, t):
+        r'\['
+        t.type = 'LSB'
+        return t
+
+    def t_RSB(self, t):
+        r'\]'
+        t.type = 'RSB'
+        return t
+
+    def t_SUM(self, t):
+        r'\+'
+        t.type = 'SUM'
+        return t
+
+    def t_SUB(self, t):
+        r'\-'
+        t.type = 'SUB'
+        return t
+
+    def t_MUL(self, t):
+        r'\*'
+        t.type = 'MUL'
+        return t
+
+    def t_MOD(self, t):
+        r'\%'
+        t.type = 'MOD'
+        return t
+
+    def t_DIV(self, t):
+        r'\/'
+        t.type = 'DIV'
+        return t
+
     def t_error(self, t):
-        raise Exception('Error at ', t.value)
+        t.value = t.value[0]
+        t.lexer.skip(1)
+        return t
 
     def build(self, **kwargs):
         self.lexer = lex.lex(self, **kwargs)
