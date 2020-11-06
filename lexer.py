@@ -98,17 +98,17 @@ class Lexer:
     # NOTE: t.value = lexeme  t.type = token
     # NOTE: it must be lower case 'error' not 'ERROR'
 
+    # error handling
     err_sign = r'(?:\*|\/|\+|\-|\%)(?:(?:\s+)?(?:\*|\/|\+|\-|\%))+'
     err_id = r'(?:[0-9]+)?[a-zA-Z_][a-zA-Z0-9_]*'
-    # err_num = r'\.?(?:\d+\.)(?:\d+\.)+(?:\d+)?|(?:\d+\.)(?!\d+)|(?<!\d)(?:\.\d+)(?!\d+)'
     err_num = r'(?:\w+|\d+|\.)+'
     err_genr = err_sign + r'|' + err_num + r'|' + err_id
+
     @TOKEN(err_genr)
     def t_ERROR(self, t):
-
         return t
 
-    # amir.haf76: I added this part for changing name
+    # amir.haf76: I added this part for changing name and defining elements in literal list
     def t_LCB(self, t):
         r'\{'
         t.type = 'LCB'
