@@ -72,7 +72,6 @@ class Lexer:
 
     def t_INTEGERNUMBER(self, t):
         # r'[0-9]{1,9}'
-        # Todo amir.haf76: its for like -78664. it needs to take minus
         r'(?<!(?:\d|\w))[\+\-]?\d+(?!\w|[.])'
         t.value = int(t.value)
         return t
