@@ -43,9 +43,6 @@ class Lexer:
         'where': "WHERE",
     }
 
-    # Todo eof  The lexpos attribute is reset so be aware of that if you're using it in error reporting.
-    # Todo the order of definition of tokens should be edited
-
     # RESERVED KEYWORD
     t_IF = r'if'
     t_WHILE = r'while'
