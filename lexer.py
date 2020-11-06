@@ -3,7 +3,6 @@ from ply.lex import TOKEN
 
 
 class Lexer:
-    # LRB: ( , RRB: ) , LCB: { , RCB: } , LT: < , GT: >
     tokens = [
         'ID', 'INTEGERNUMBER', 'FLOATNUMBER', 'INTEGER', 'FLOAT',
         'BOOLEAN', 'FUNCTION', 'TRUE', 'FALSE', 'PRINT', 'RETURN',
