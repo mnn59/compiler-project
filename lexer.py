@@ -56,7 +56,7 @@ class Lexer:
     t_GT = r'\>'
     t_LT = r'\<'
 
-    # COLONS, OPERATOR, BRACKETS
+    # COLONS, OPERATORS, BRACKETS
     t_SEMICOLON = r'\;'
     t_COLON = r'\:'
     t_COMMA = r'\,'
@@ -78,8 +78,10 @@ class Lexer:
         return t
 
     def t_ID(self, t):
-        r'[a-z_][a-zA-Z0-9_]*'
-        # Todo amir.haf76: LexToken(ID,'jjjgg444',12,126), jjjggg4444., '.' needs to be captured.
+        # We have to put True and False here because their first character is Capital and won't be checked in
+        # reserved list, so we should add them manually
+        # Also we could define 2 methods for True and false but we did not do that
+        r'[a-z_][a-zA-Z0-9_]*|True|False'
         if t.value in self.reserved:
             t.type = self.reserved[t.value]
         return t
