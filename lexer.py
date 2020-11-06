@@ -72,7 +72,7 @@ class Lexer:
 
     def t_INTEGERNUMBER(self, t):
         # r'[0-9]{1,9}'
-        r'(?<!(?:\d|\w))[\+\-]?\d+(?!\w|[.])'
+        r'(?<!(?:\d))[\+\-]?\d+(?!\w|[.])'
         t.value = int(t.value)
         return t
 
