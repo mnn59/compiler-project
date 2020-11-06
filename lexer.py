@@ -48,7 +48,6 @@ class Lexer:
     t_WHILE = r'while'
     t_PRINT = r'print'
 
-    # amir.haf76: start defining new tokens
     t_EQ = r'\=\='
     t_GE = r'\>='
     t_LE = r'\<='
