@@ -172,7 +172,3 @@ class Lexer:
     def build(self, **kwargs):
         self.lexer = lex.lex(self, **kwargs)
         return self.lexer
-
-# issues:
-# 1. 002 --> 2
-# 2. 2+3 --> 2 + 3
