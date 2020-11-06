@@ -64,14 +64,9 @@ class Lexer:
     literals = ['{', '}', '(', ')', '[', ']',
                 '*', '/', '%', '+', '-']
 
-    # amir.haf76: end defining new tokens
-
     # amir.haf76: adding float number, float number should be upper than integer number!!
     def t_FLOATNUMBER(self, t):
         r'(?<!\d|\w)[\+\-]?(?:0*[1-9]\d{0,8}|0+)\.\d+(?!\w|[.])'
-        # r'(?<!\d)[\+\-]?\d{1,9}\.\d+'
-        # r'(?:(?<!\d)[\-\+]?)(?:[1-9]\d{0,8}|0)\.(?:0|\d*[1-9])'
-        # r'(?:(?<!\d)[\-\+]?)(?:[1-9]\d{0,8}|0)\.(?:0|\d*[1-9])|(?<=0)(?:[1-9]\d{0,8}|0)\.(?:0|\d*[1-9])'
         t.value = float(t.value)
         return t
 
