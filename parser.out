@@ -1,0 +1,851 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    AND
+    ASSIGN
+    BOOLEAN
+    COLON
+    COMMA
+    ELSE
+    ELSEIF
+    ERROR
+    FLOAT
+    FLOATNUMBER
+    FOR
+    FUNCTION
+    ID
+    IF
+    IN
+    INTEGER
+    LCB
+    LSB
+    MAIN
+    MOD
+    NOT
+    ON
+    OR
+    PRINT
+    RCB
+    RETURN
+    RSB
+    SEMICOLON
+    WHERE
+    WHILE
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> expression
+Rule 2     expression -> expression SUM term
+Rule 3     expression -> expression SUB term
+Rule 4     expression -> term
+Rule 5     term -> term MUL factor
+Rule 6     term -> term DIV factor
+Rule 7     term -> factor
+Rule 8     factor -> INTEGERNUMBER
+Rule 9     factor -> TRUE
+Rule 10    factor -> FALSE
+Rule 11    factor -> LRB expression RRB
+Rule 12    expression -> expression EQ expression
+Rule 13    expression -> expression GT expression
+Rule 14    expression -> expression GE expression
+Rule 15    expression -> expression LT expression
+Rule 16    expression -> expression LE expression
+Rule 17    expression -> expression NE expression
+
+Terminals, with rules where they appear
+
+AND                  : 
+ASSIGN               : 
+BOOLEAN              : 
+COLON                : 
+COMMA                : 
+DIV                  : 6
+ELSE                 : 
+ELSEIF               : 
+EQ                   : 12
+ERROR                : 
+FALSE                : 10
+FLOAT                : 
+FLOATNUMBER          : 
+FOR                  : 
+FUNCTION             : 
+GE                   : 14
+GT                   : 13
+ID                   : 
+IF                   : 
+IN                   : 
+INTEGER              : 
+INTEGERNUMBER        : 8
+LCB                  : 
+LE                   : 16
+LRB                  : 11
+LSB                  : 
+LT                   : 15
+MAIN                 : 
+MOD                  : 
+MUL                  : 5
+NE                   : 17
+NOT                  : 
+ON                   : 
+OR                   : 
+PRINT                : 
+RCB                  : 
+RETURN               : 
+RRB                  : 11
+RSB                  : 
+SEMICOLON            : 
+SUB                  : 3
+SUM                  : 2
+TRUE                 : 9
+WHERE                : 
+WHILE                : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+expression           : 1 2 3 11 12 12 13 13 14 14 15 15 16 16 17 17
+factor               : 5 6 7
+program              : 0
+term                 : 2 3 4 5 6
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . expression
+    (2) expression -> . expression SUM term
+    (3) expression -> . expression SUB term
+    (4) expression -> . term
+    (12) expression -> . expression EQ expression
+    (13) expression -> . expression GT expression
+    (14) expression -> . expression GE expression
+    (15) expression -> . expression LT expression
+    (16) expression -> . expression LE expression
+    (17) expression -> . expression NE expression
+    (5) term -> . term MUL factor
+    (6) term -> . term DIV factor
+    (7) term -> . factor
+    (8) factor -> . INTEGERNUMBER
+    (9) factor -> . TRUE
+    (10) factor -> . FALSE
+    (11) factor -> . LRB expression RRB
+
+    INTEGERNUMBER   shift and go to state 5
+    TRUE            shift and go to state 6
+    FALSE           shift and go to state 7
+    LRB             shift and go to state 8
+
+    program                        shift and go to state 1
+    expression                     shift and go to state 2
+    term                           shift and go to state 3
+    factor                         shift and go to state 4
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> expression .
+    (2) expression -> expression . SUM term
+    (3) expression -> expression . SUB term
+    (12) expression -> expression . EQ expression
+    (13) expression -> expression . GT expression
+    (14) expression -> expression . GE expression
+    (15) expression -> expression . LT expression
+    (16) expression -> expression . LE expression
+    (17) expression -> expression . NE expression
+
+    $end            reduce using rule 1 (program -> expression .)
+    SUM             shift and go to state 9
+    SUB             shift and go to state 10
+    EQ              shift and go to state 11
+    GT              shift and go to state 12
+    GE              shift and go to state 13
+    LT              shift and go to state 14
+    LE              shift and go to state 15
+    NE              shift and go to state 16
+
+
+state 3
+
+    (4) expression -> term .
+    (5) term -> term . MUL factor
+    (6) term -> term . DIV factor
+
+    SUM             reduce using rule 4 (expression -> term .)
+    SUB             reduce using rule 4 (expression -> term .)
+    EQ              reduce using rule 4 (expression -> term .)
+    GT              reduce using rule 4 (expression -> term .)
+    GE              reduce using rule 4 (expression -> term .)
+    LT              reduce using rule 4 (expression -> term .)
+    LE              reduce using rule 4 (expression -> term .)
+    NE              reduce using rule 4 (expression -> term .)
+    $end            reduce using rule 4 (expression -> term .)
+    RRB             reduce using rule 4 (expression -> term .)
+    MUL             shift and go to state 17
+    DIV             shift and go to state 18
+
+
+state 4
+
+    (7) term -> factor .
+
+    MUL             reduce using rule 7 (term -> factor .)
+    DIV             reduce using rule 7 (term -> factor .)
+    SUM             reduce using rule 7 (term -> factor .)
+    SUB             reduce using rule 7 (term -> factor .)
+    EQ              reduce using rule 7 (term -> factor .)
+    GT              reduce using rule 7 (term -> factor .)
+    GE              reduce using rule 7 (term -> factor .)
+    LT              reduce using rule 7 (term -> factor .)
+    LE              reduce using rule 7 (term -> factor .)
+    NE              reduce using rule 7 (term -> factor .)
+    $end            reduce using rule 7 (term -> factor .)
+    RRB             reduce using rule 7 (term -> factor .)
+
+
+state 5
+
+    (8) factor -> INTEGERNUMBER .
+
+    MUL             reduce using rule 8 (factor -> INTEGERNUMBER .)
+    DIV             reduce using rule 8 (factor -> INTEGERNUMBER .)
+    SUM             reduce using rule 8 (factor -> INTEGERNUMBER .)
+    SUB             reduce using rule 8 (factor -> INTEGERNUMBER .)
+    EQ              reduce using rule 8 (factor -> INTEGERNUMBER .)
+    GT              reduce using rule 8 (factor -> INTEGERNUMBER .)
+    GE              reduce using rule 8 (factor -> INTEGERNUMBER .)
+    LT              reduce using rule 8 (factor -> INTEGERNUMBER .)
+    LE              reduce using rule 8 (factor -> INTEGERNUMBER .)
+    NE              reduce using rule 8 (factor -> INTEGERNUMBER .)
+    $end            reduce using rule 8 (factor -> INTEGERNUMBER .)
+    RRB             reduce using rule 8 (factor -> INTEGERNUMBER .)
+
+
+state 6
+
+    (9) factor -> TRUE .
+
+    MUL             reduce using rule 9 (factor -> TRUE .)
+    DIV             reduce using rule 9 (factor -> TRUE .)
+    SUM             reduce using rule 9 (factor -> TRUE .)
+    SUB             reduce using rule 9 (factor -> TRUE .)
+    EQ              reduce using rule 9 (factor -> TRUE .)
+    GT              reduce using rule 9 (factor -> TRUE .)
+    GE              reduce using rule 9 (factor -> TRUE .)
+    LT              reduce using rule 9 (factor -> TRUE .)
+    LE              reduce using rule 9 (factor -> TRUE .)
+    NE              reduce using rule 9 (factor -> TRUE .)
+    $end            reduce using rule 9 (factor -> TRUE .)
+    RRB             reduce using rule 9 (factor -> TRUE .)
+
+
+state 7
+
+    (10) factor -> FALSE .
+
+    MUL             reduce using rule 10 (factor -> FALSE .)
+    DIV             reduce using rule 10 (factor -> FALSE .)
+    SUM             reduce using rule 10 (factor -> FALSE .)
+    SUB             reduce using rule 10 (factor -> FALSE .)
+    EQ              reduce using rule 10 (factor -> FALSE .)
+    GT              reduce using rule 10 (factor -> FALSE .)
+    GE              reduce using rule 10 (factor -> FALSE .)
+    LT              reduce using rule 10 (factor -> FALSE .)
+    LE              reduce using rule 10 (factor -> FALSE .)
+    NE              reduce using rule 10 (factor -> FALSE .)
+    $end            reduce using rule 10 (factor -> FALSE .)
+    RRB             reduce using rule 10 (factor -> FALSE .)
+
+
+state 8
+
+    (11) factor -> LRB . expression RRB
+    (2) expression -> . expression SUM term
+    (3) expression -> . expression SUB term
+    (4) expression -> . term
+    (12) expression -> . expression EQ expression
+    (13) expression -> . expression GT expression
+    (14) expression -> . expression GE expression
+    (15) expression -> . expression LT expression
+    (16) expression -> . expression LE expression
+    (17) expression -> . expression NE expression
+    (5) term -> . term MUL factor
+    (6) term -> . term DIV factor
+    (7) term -> . factor
+    (8) factor -> . INTEGERNUMBER
+    (9) factor -> . TRUE
+    (10) factor -> . FALSE
+    (11) factor -> . LRB expression RRB
+
+    INTEGERNUMBER   shift and go to state 5
+    TRUE            shift and go to state 6
+    FALSE           shift and go to state 7
+    LRB             shift and go to state 8
+
+    expression                     shift and go to state 19
+    term                           shift and go to state 3
+    factor                         shift and go to state 4
+
+state 9
+
+    (2) expression -> expression SUM . term
+    (5) term -> . term MUL factor
+    (6) term -> . term DIV factor
+    (7) term -> . factor
+    (8) factor -> . INTEGERNUMBER
+    (9) factor -> . TRUE
+    (10) factor -> . FALSE
+    (11) factor -> . LRB expression RRB
+
+    INTEGERNUMBER   shift and go to state 5
+    TRUE            shift and go to state 6
+    FALSE           shift and go to state 7
+    LRB             shift and go to state 8
+
+    term                           shift and go to state 20
+    factor                         shift and go to state 4
+
+state 10
+
+    (3) expression -> expression SUB . term
+    (5) term -> . term MUL factor
+    (6) term -> . term DIV factor
+    (7) term -> . factor
+    (8) factor -> . INTEGERNUMBER
+    (9) factor -> . TRUE
+    (10) factor -> . FALSE
+    (11) factor -> . LRB expression RRB
+
+    INTEGERNUMBER   shift and go to state 5
+    TRUE            shift and go to state 6
+    FALSE           shift and go to state 7
+    LRB             shift and go to state 8
+
+    term                           shift and go to state 21
+    factor                         shift and go to state 4
+
+state 11
+
+    (12) expression -> expression EQ . expression
+    (2) expression -> . expression SUM term
+    (3) expression -> . expression SUB term
+    (4) expression -> . term
+    (12) expression -> . expression EQ expression
+    (13) expression -> . expression GT expression
+    (14) expression -> . expression GE expression
+    (15) expression -> . expression LT expression
+    (16) expression -> . expression LE expression
+    (17) expression -> . expression NE expression
+    (5) term -> . term MUL factor
+    (6) term -> . term DIV factor
+    (7) term -> . factor
+    (8) factor -> . INTEGERNUMBER
+    (9) factor -> . TRUE
+    (10) factor -> . FALSE
+    (11) factor -> . LRB expression RRB
+
+    INTEGERNUMBER   shift and go to state 5
+    TRUE            shift and go to state 6
+    FALSE           shift and go to state 7
+    LRB             shift and go to state 8
+
+    expression                     shift and go to state 22
+    term                           shift and go to state 3
+    factor                         shift and go to state 4
+
+state 12
+
+    (13) expression -> expression GT . expression
+    (2) expression -> . expression SUM term
+    (3) expression -> . expression SUB term
+    (4) expression -> . term
+    (12) expression -> . expression EQ expression
+    (13) expression -> . expression GT expression
+    (14) expression -> . expression GE expression
+    (15) expression -> . expression LT expression
+    (16) expression -> . expression LE expression
+    (17) expression -> . expression NE expression
+    (5) term -> . term MUL factor
+    (6) term -> . term DIV factor
+    (7) term -> . factor
+    (8) factor -> . INTEGERNUMBER
+    (9) factor -> . TRUE
+    (10) factor -> . FALSE
+    (11) factor -> . LRB expression RRB
+
+    INTEGERNUMBER   shift and go to state 5
+    TRUE            shift and go to state 6
+    FALSE           shift and go to state 7
+    LRB             shift and go to state 8
+
+    expression                     shift and go to state 23
+    term                           shift and go to state 3
+    factor                         shift and go to state 4
+
+state 13
+
+    (14) expression -> expression GE . expression
+    (2) expression -> . expression SUM term
+    (3) expression -> . expression SUB term
+    (4) expression -> . term
+    (12) expression -> . expression EQ expression
+    (13) expression -> . expression GT expression
+    (14) expression -> . expression GE expression
+    (15) expression -> . expression LT expression
+    (16) expression -> . expression LE expression
+    (17) expression -> . expression NE expression
+    (5) term -> . term MUL factor
+    (6) term -> . term DIV factor
+    (7) term -> . factor
+    (8) factor -> . INTEGERNUMBER
+    (9) factor -> . TRUE
+    (10) factor -> . FALSE
+    (11) factor -> . LRB expression RRB
+
+    INTEGERNUMBER   shift and go to state 5
+    TRUE            shift and go to state 6
+    FALSE           shift and go to state 7
+    LRB             shift and go to state 8
+
+    expression                     shift and go to state 24
+    term                           shift and go to state 3
+    factor                         shift and go to state 4
+
+state 14
+
+    (15) expression -> expression LT . expression
+    (2) expression -> . expression SUM term
+    (3) expression -> . expression SUB term
+    (4) expression -> . term
+    (12) expression -> . expression EQ expression
+    (13) expression -> . expression GT expression
+    (14) expression -> . expression GE expression
+    (15) expression -> . expression LT expression
+    (16) expression -> . expression LE expression
+    (17) expression -> . expression NE expression
+    (5) term -> . term MUL factor
+    (6) term -> . term DIV factor
+    (7) term -> . factor
+    (8) factor -> . INTEGERNUMBER
+    (9) factor -> . TRUE
+    (10) factor -> . FALSE
+    (11) factor -> . LRB expression RRB
+
+    INTEGERNUMBER   shift and go to state 5
+    TRUE            shift and go to state 6
+    FALSE           shift and go to state 7
+    LRB             shift and go to state 8
+
+    expression                     shift and go to state 25
+    term                           shift and go to state 3
+    factor                         shift and go to state 4
+
+state 15
+
+    (16) expression -> expression LE . expression
+    (2) expression -> . expression SUM term
+    (3) expression -> . expression SUB term
+    (4) expression -> . term
+    (12) expression -> . expression EQ expression
+    (13) expression -> . expression GT expression
+    (14) expression -> . expression GE expression
+    (15) expression -> . expression LT expression
+    (16) expression -> . expression LE expression
+    (17) expression -> . expression NE expression
+    (5) term -> . term MUL factor
+    (6) term -> . term DIV factor
+    (7) term -> . factor
+    (8) factor -> . INTEGERNUMBER
+    (9) factor -> . TRUE
+    (10) factor -> . FALSE
+    (11) factor -> . LRB expression RRB
+
+    INTEGERNUMBER   shift and go to state 5
+    TRUE            shift and go to state 6
+    FALSE           shift and go to state 7
+    LRB             shift and go to state 8
+
+    expression                     shift and go to state 26
+    term                           shift and go to state 3
+    factor                         shift and go to state 4
+
+state 16
+
+    (17) expression -> expression NE . expression
+    (2) expression -> . expression SUM term
+    (3) expression -> . expression SUB term
+    (4) expression -> . term
+    (12) expression -> . expression EQ expression
+    (13) expression -> . expression GT expression
+    (14) expression -> . expression GE expression
+    (15) expression -> . expression LT expression
+    (16) expression -> . expression LE expression
+    (17) expression -> . expression NE expression
+    (5) term -> . term MUL factor
+    (6) term -> . term DIV factor
+    (7) term -> . factor
+    (8) factor -> . INTEGERNUMBER
+    (9) factor -> . TRUE
+    (10) factor -> . FALSE
+    (11) factor -> . LRB expression RRB
+
+    INTEGERNUMBER   shift and go to state 5
+    TRUE            shift and go to state 6
+    FALSE           shift and go to state 7
+    LRB             shift and go to state 8
+
+    expression                     shift and go to state 27
+    term                           shift and go to state 3
+    factor                         shift and go to state 4
+
+state 17
+
+    (5) term -> term MUL . factor
+    (8) factor -> . INTEGERNUMBER
+    (9) factor -> . TRUE
+    (10) factor -> . FALSE
+    (11) factor -> . LRB expression RRB
+
+    INTEGERNUMBER   shift and go to state 5
+    TRUE            shift and go to state 6
+    FALSE           shift and go to state 7
+    LRB             shift and go to state 8
+
+    factor                         shift and go to state 28
+
+state 18
+
+    (6) term -> term DIV . factor
+    (8) factor -> . INTEGERNUMBER
+    (9) factor -> . TRUE
+    (10) factor -> . FALSE
+    (11) factor -> . LRB expression RRB
+
+    INTEGERNUMBER   shift and go to state 5
+    TRUE            shift and go to state 6
+    FALSE           shift and go to state 7
+    LRB             shift and go to state 8
+
+    factor                         shift and go to state 29
+
+state 19
+
+    (11) factor -> LRB expression . RRB
+    (2) expression -> expression . SUM term
+    (3) expression -> expression . SUB term
+    (12) expression -> expression . EQ expression
+    (13) expression -> expression . GT expression
+    (14) expression -> expression . GE expression
+    (15) expression -> expression . LT expression
+    (16) expression -> expression . LE expression
+    (17) expression -> expression . NE expression
+
+    RRB             shift and go to state 30
+    SUM             shift and go to state 9
+    SUB             shift and go to state 10
+    EQ              shift and go to state 11
+    GT              shift and go to state 12
+    GE              shift and go to state 13
+    LT              shift and go to state 14
+    LE              shift and go to state 15
+    NE              shift and go to state 16
+
+
+state 20
+
+    (2) expression -> expression SUM term .
+    (5) term -> term . MUL factor
+    (6) term -> term . DIV factor
+
+    SUM             reduce using rule 2 (expression -> expression SUM term .)
+    SUB             reduce using rule 2 (expression -> expression SUM term .)
+    EQ              reduce using rule 2 (expression -> expression SUM term .)
+    GT              reduce using rule 2 (expression -> expression SUM term .)
+    GE              reduce using rule 2 (expression -> expression SUM term .)
+    LT              reduce using rule 2 (expression -> expression SUM term .)
+    LE              reduce using rule 2 (expression -> expression SUM term .)
+    NE              reduce using rule 2 (expression -> expression SUM term .)
+    $end            reduce using rule 2 (expression -> expression SUM term .)
+    RRB             reduce using rule 2 (expression -> expression SUM term .)
+    MUL             shift and go to state 17
+    DIV             shift and go to state 18
+
+
+state 21
+
+    (3) expression -> expression SUB term .
+    (5) term -> term . MUL factor
+    (6) term -> term . DIV factor
+
+    SUM             reduce using rule 3 (expression -> expression SUB term .)
+    SUB             reduce using rule 3 (expression -> expression SUB term .)
+    EQ              reduce using rule 3 (expression -> expression SUB term .)
+    GT              reduce using rule 3 (expression -> expression SUB term .)
+    GE              reduce using rule 3 (expression -> expression SUB term .)
+    LT              reduce using rule 3 (expression -> expression SUB term .)
+    LE              reduce using rule 3 (expression -> expression SUB term .)
+    NE              reduce using rule 3 (expression -> expression SUB term .)
+    $end            reduce using rule 3 (expression -> expression SUB term .)
+    RRB             reduce using rule 3 (expression -> expression SUB term .)
+    MUL             shift and go to state 17
+    DIV             shift and go to state 18
+
+
+state 22
+
+    (12) expression -> expression EQ expression .
+    (2) expression -> expression . SUM term
+    (3) expression -> expression . SUB term
+    (12) expression -> expression . EQ expression
+    (13) expression -> expression . GT expression
+    (14) expression -> expression . GE expression
+    (15) expression -> expression . LT expression
+    (16) expression -> expression . LE expression
+    (17) expression -> expression . NE expression
+
+    EQ              reduce using rule 12 (expression -> expression EQ expression .)
+    GT              reduce using rule 12 (expression -> expression EQ expression .)
+    GE              reduce using rule 12 (expression -> expression EQ expression .)
+    LT              reduce using rule 12 (expression -> expression EQ expression .)
+    LE              reduce using rule 12 (expression -> expression EQ expression .)
+    NE              reduce using rule 12 (expression -> expression EQ expression .)
+    $end            reduce using rule 12 (expression -> expression EQ expression .)
+    RRB             reduce using rule 12 (expression -> expression EQ expression .)
+    SUM             shift and go to state 9
+    SUB             shift and go to state 10
+
+  ! SUM             [ reduce using rule 12 (expression -> expression EQ expression .) ]
+  ! SUB             [ reduce using rule 12 (expression -> expression EQ expression .) ]
+  ! EQ              [ shift and go to state 11 ]
+  ! GT              [ shift and go to state 12 ]
+  ! GE              [ shift and go to state 13 ]
+  ! LT              [ shift and go to state 14 ]
+  ! LE              [ shift and go to state 15 ]
+  ! NE              [ shift and go to state 16 ]
+
+
+state 23
+
+    (13) expression -> expression GT expression .
+    (2) expression -> expression . SUM term
+    (3) expression -> expression . SUB term
+    (12) expression -> expression . EQ expression
+    (13) expression -> expression . GT expression
+    (14) expression -> expression . GE expression
+    (15) expression -> expression . LT expression
+    (16) expression -> expression . LE expression
+    (17) expression -> expression . NE expression
+
+    EQ              reduce using rule 13 (expression -> expression GT expression .)
+    GT              reduce using rule 13 (expression -> expression GT expression .)
+    GE              reduce using rule 13 (expression -> expression GT expression .)
+    LT              reduce using rule 13 (expression -> expression GT expression .)
+    LE              reduce using rule 13 (expression -> expression GT expression .)
+    NE              reduce using rule 13 (expression -> expression GT expression .)
+    $end            reduce using rule 13 (expression -> expression GT expression .)
+    RRB             reduce using rule 13 (expression -> expression GT expression .)
+    SUM             shift and go to state 9
+    SUB             shift and go to state 10
+
+  ! SUM             [ reduce using rule 13 (expression -> expression GT expression .) ]
+  ! SUB             [ reduce using rule 13 (expression -> expression GT expression .) ]
+  ! EQ              [ shift and go to state 11 ]
+  ! GT              [ shift and go to state 12 ]
+  ! GE              [ shift and go to state 13 ]
+  ! LT              [ shift and go to state 14 ]
+  ! LE              [ shift and go to state 15 ]
+  ! NE              [ shift and go to state 16 ]
+
+
+state 24
+
+    (14) expression -> expression GE expression .
+    (2) expression -> expression . SUM term
+    (3) expression -> expression . SUB term
+    (12) expression -> expression . EQ expression
+    (13) expression -> expression . GT expression
+    (14) expression -> expression . GE expression
+    (15) expression -> expression . LT expression
+    (16) expression -> expression . LE expression
+    (17) expression -> expression . NE expression
+
+    EQ              reduce using rule 14 (expression -> expression GE expression .)
+    GT              reduce using rule 14 (expression -> expression GE expression .)
+    GE              reduce using rule 14 (expression -> expression GE expression .)
+    LT              reduce using rule 14 (expression -> expression GE expression .)
+    LE              reduce using rule 14 (expression -> expression GE expression .)
+    NE              reduce using rule 14 (expression -> expression GE expression .)
+    $end            reduce using rule 14 (expression -> expression GE expression .)
+    RRB             reduce using rule 14 (expression -> expression GE expression .)
+    SUM             shift and go to state 9
+    SUB             shift and go to state 10
+
+  ! SUM             [ reduce using rule 14 (expression -> expression GE expression .) ]
+  ! SUB             [ reduce using rule 14 (expression -> expression GE expression .) ]
+  ! EQ              [ shift and go to state 11 ]
+  ! GT              [ shift and go to state 12 ]
+  ! GE              [ shift and go to state 13 ]
+  ! LT              [ shift and go to state 14 ]
+  ! LE              [ shift and go to state 15 ]
+  ! NE              [ shift and go to state 16 ]
+
+
+state 25
+
+    (15) expression -> expression LT expression .
+    (2) expression -> expression . SUM term
+    (3) expression -> expression . SUB term
+    (12) expression -> expression . EQ expression
+    (13) expression -> expression . GT expression
+    (14) expression -> expression . GE expression
+    (15) expression -> expression . LT expression
+    (16) expression -> expression . LE expression
+    (17) expression -> expression . NE expression
+
+    EQ              reduce using rule 15 (expression -> expression LT expression .)
+    GT              reduce using rule 15 (expression -> expression LT expression .)
+    GE              reduce using rule 15 (expression -> expression LT expression .)
+    LT              reduce using rule 15 (expression -> expression LT expression .)
+    LE              reduce using rule 15 (expression -> expression LT expression .)
+    NE              reduce using rule 15 (expression -> expression LT expression .)
+    $end            reduce using rule 15 (expression -> expression LT expression .)
+    RRB             reduce using rule 15 (expression -> expression LT expression .)
+    SUM             shift and go to state 9
+    SUB             shift and go to state 10
+
+  ! SUM             [ reduce using rule 15 (expression -> expression LT expression .) ]
+  ! SUB             [ reduce using rule 15 (expression -> expression LT expression .) ]
+  ! EQ              [ shift and go to state 11 ]
+  ! GT              [ shift and go to state 12 ]
+  ! GE              [ shift and go to state 13 ]
+  ! LT              [ shift and go to state 14 ]
+  ! LE              [ shift and go to state 15 ]
+  ! NE              [ shift and go to state 16 ]
+
+
+state 26
+
+    (16) expression -> expression LE expression .
+    (2) expression -> expression . SUM term
+    (3) expression -> expression . SUB term
+    (12) expression -> expression . EQ expression
+    (13) expression -> expression . GT expression
+    (14) expression -> expression . GE expression
+    (15) expression -> expression . LT expression
+    (16) expression -> expression . LE expression
+    (17) expression -> expression . NE expression
+
+    EQ              reduce using rule 16 (expression -> expression LE expression .)
+    GT              reduce using rule 16 (expression -> expression LE expression .)
+    GE              reduce using rule 16 (expression -> expression LE expression .)
+    LT              reduce using rule 16 (expression -> expression LE expression .)
+    LE              reduce using rule 16 (expression -> expression LE expression .)
+    NE              reduce using rule 16 (expression -> expression LE expression .)
+    $end            reduce using rule 16 (expression -> expression LE expression .)
+    RRB             reduce using rule 16 (expression -> expression LE expression .)
+    SUM             shift and go to state 9
+    SUB             shift and go to state 10
+
+  ! SUM             [ reduce using rule 16 (expression -> expression LE expression .) ]
+  ! SUB             [ reduce using rule 16 (expression -> expression LE expression .) ]
+  ! EQ              [ shift and go to state 11 ]
+  ! GT              [ shift and go to state 12 ]
+  ! GE              [ shift and go to state 13 ]
+  ! LT              [ shift and go to state 14 ]
+  ! LE              [ shift and go to state 15 ]
+  ! NE              [ shift and go to state 16 ]
+
+
+state 27
+
+    (17) expression -> expression NE expression .
+    (2) expression -> expression . SUM term
+    (3) expression -> expression . SUB term
+    (12) expression -> expression . EQ expression
+    (13) expression -> expression . GT expression
+    (14) expression -> expression . GE expression
+    (15) expression -> expression . LT expression
+    (16) expression -> expression . LE expression
+    (17) expression -> expression . NE expression
+
+    EQ              reduce using rule 17 (expression -> expression NE expression .)
+    GT              reduce using rule 17 (expression -> expression NE expression .)
+    GE              reduce using rule 17 (expression -> expression NE expression .)
+    LT              reduce using rule 17 (expression -> expression NE expression .)
+    LE              reduce using rule 17 (expression -> expression NE expression .)
+    NE              reduce using rule 17 (expression -> expression NE expression .)
+    $end            reduce using rule 17 (expression -> expression NE expression .)
+    RRB             reduce using rule 17 (expression -> expression NE expression .)
+    SUM             shift and go to state 9
+    SUB             shift and go to state 10
+
+  ! SUM             [ reduce using rule 17 (expression -> expression NE expression .) ]
+  ! SUB             [ reduce using rule 17 (expression -> expression NE expression .) ]
+  ! EQ              [ shift and go to state 11 ]
+  ! GT              [ shift and go to state 12 ]
+  ! GE              [ shift and go to state 13 ]
+  ! LT              [ shift and go to state 14 ]
+  ! LE              [ shift and go to state 15 ]
+  ! NE              [ shift and go to state 16 ]
+
+
+state 28
+
+    (5) term -> term MUL factor .
+
+    MUL             reduce using rule 5 (term -> term MUL factor .)
+    DIV             reduce using rule 5 (term -> term MUL factor .)
+    SUM             reduce using rule 5 (term -> term MUL factor .)
+    SUB             reduce using rule 5 (term -> term MUL factor .)
+    EQ              reduce using rule 5 (term -> term MUL factor .)
+    GT              reduce using rule 5 (term -> term MUL factor .)
+    GE              reduce using rule 5 (term -> term MUL factor .)
+    LT              reduce using rule 5 (term -> term MUL factor .)
+    LE              reduce using rule 5 (term -> term MUL factor .)
+    NE              reduce using rule 5 (term -> term MUL factor .)
+    $end            reduce using rule 5 (term -> term MUL factor .)
+    RRB             reduce using rule 5 (term -> term MUL factor .)
+
+
+state 29
+
+    (6) term -> term DIV factor .
+
+    MUL             reduce using rule 6 (term -> term DIV factor .)
+    DIV             reduce using rule 6 (term -> term DIV factor .)
+    SUM             reduce using rule 6 (term -> term DIV factor .)
+    SUB             reduce using rule 6 (term -> term DIV factor .)
+    EQ              reduce using rule 6 (term -> term DIV factor .)
+    GT              reduce using rule 6 (term -> term DIV factor .)
+    GE              reduce using rule 6 (term -> term DIV factor .)
+    LT              reduce using rule 6 (term -> term DIV factor .)
+    LE              reduce using rule 6 (term -> term DIV factor .)
+    NE              reduce using rule 6 (term -> term DIV factor .)
+    $end            reduce using rule 6 (term -> term DIV factor .)
+    RRB             reduce using rule 6 (term -> term DIV factor .)
+
+
+state 30
+
+    (11) factor -> LRB expression RRB .
+
+    MUL             reduce using rule 11 (factor -> LRB expression RRB .)
+    DIV             reduce using rule 11 (factor -> LRB expression RRB .)
+    SUM             reduce using rule 11 (factor -> LRB expression RRB .)
+    SUB             reduce using rule 11 (factor -> LRB expression RRB .)
+    EQ              reduce using rule 11 (factor -> LRB expression RRB .)
+    GT              reduce using rule 11 (factor -> LRB expression RRB .)
+    GE              reduce using rule 11 (factor -> LRB expression RRB .)
+    LT              reduce using rule 11 (factor -> LRB expression RRB .)
+    LE              reduce using rule 11 (factor -> LRB expression RRB .)
+    NE              reduce using rule 11 (factor -> LRB expression RRB .)
+    $end            reduce using rule 11 (factor -> LRB expression RRB .)
+    RRB             reduce using rule 11 (factor -> LRB expression RRB .)
+
