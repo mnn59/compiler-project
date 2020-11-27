@@ -12,9 +12,9 @@ class Parser:
         # Yacc example
 
     def p_program(self, p):
-        'program : expression'
-        # p[0] = p[1]
-        print('program : expression')
+        'program : declist MAIN LRB RRB block'
+        p[0] = p[1] + p[2] + p[3] + p[4] + p[5]
+        print('program : declist MAIN LRB RRB block')
 
     # declist
     def p_declist_dec(self, p):
@@ -68,9 +68,10 @@ class Parser:
         'iddec : ID LSB expression RSB'
         p[0] = f'{p[1]}[{p[3]}]'
         print('iddec : ID LSB expression RSB')
+
     def p_iddec_id_assign_exp(self, p):
         'iddec : ID ASSIGN expression'
-        p[0] = f'{p[1]}={p[3]}'
+        p[0] = p[1] + p[2] + p[3]
         print('iddec : ID ASSIGN expression')
 
     # idlist
@@ -81,10 +82,60 @@ class Parser:
 
     def p_idlist_comma_iddec(self, p):
         'idlist : idlist COMMA iddec'
-        p[0] = f'{p[1]},{p[3]}'
+        p[0] = p[1] + p[2] + p[3]
         print('idlist : idlist COMMA iddec')
 
+    # vardec
+    def p_vardec(self, p):
+        'vardec : idlist COLON type SEMICOLON'
+        p[0] = p[1] + p[2] + p[3] + p[4]
 
+    # funcdec
+    def p_funcdec_type(self, p):
+        'funcdec : FUNCTION LRB paramdecs RRB COLON type block'
+        temp = ''
+        for i in range(1, 8):
+            temp += p[i]
+        p[0] = temp
+        print('funcdec : FUNCTION LRB paramdecs RRB COLON type block')
+
+    def p_funcdec_id(self, p):
+        'funcdec : FUNCTION ID LRB paramdecs RRB block'
+        temp = ''
+        for i in range(1, 7):
+            temp += p[i]
+        p[0] = temp
+        print('funcdec : FUNCTION ID LRB paramdecs RRB block')
+
+    # paramdecs
+    def p_paramdecs_paramdecslist(self, p):
+        'paramdecs : paramdecslist'
+        p[0] = p[1]
+        print('paramdecs : paramdecslist')
+
+    def p_paramdecs_empty(self, p):
+        'paramdecs : empty'
+        print('paramdecs : empty')
+
+    # paramdecslist
+    def p_paramdecslist_paramdec(self, p):
+        'paramdecslist : paramdec'
+        p[0] = p[1]
+        print('paramdecslist : paramdec')
+
+    def p_paramdecslist_comma_paramdec(self, p):
+        'paramdecslist : paramdecslist COMMA paramdec'
+        p[0] = p[1] + p[2] + p[3]
+
+    def p_paramdec_id(self, p):
+        'paramdec : ID COLON type'
+        p[0] = p[1] + p[2] + p[3]
+        print( 'paramdec : ID COLON type')
+
+    def p_paramdec_id_bracket(self, p):
+        'paramdec : ID LSB RSB COLON type'
+        p[0] = p[1] + p[2] + p[3] + p[4] + p[5]
+        print('paramdec : ID LSB RSB COLON type')
 
     # exp
     def p_exp_val(self, p):
@@ -251,15 +302,43 @@ class Parser:
         p[0] = p[1]
         print('stmt : block')
 
+    def p_stmt_vardec(self, p):
+        'stmt : vardec'
+        p[0] = p[1]
+        print('stmt : vardec')
+
+    def p_stmt_while(self, p):
+        'stmt : WHILE LRB expression RRB stmt'
+        temp = ''
+        for i in range(1, 6):
+            temp += p[i]
+        p[0] = temp
+        print('stmt : WHILE LRB expression RRB stmt')
+
+    def p_stmt_on_cases(self, p):
+        'stmt : ON LRB expression RRB LCB cases RCB SEMICOLON'
+        temp = ''
+        for i in range(1, 9):
+            temp += p[i]
+        p[0] = temp
+        print('stmt : ON LRB expression RRB LCB cases RCB SEMICOLON')
+
+
+
     def p_stmt_print(self, p):
         'stmt : PRINT LRB ID RRB SEMICOLON'
         p[0] = f'print({p[3]});'
         print('stmt : PRINT LRB ID RRB SEMICOLON')
 
-    def p_stmt_exp(self, p):
+    def p_stmt_return_exp(self, p):
         'stmt : RETURN expression SEMICOLON'
-        p[0] = p[2]
+        p[0] = p[1] + p[2] + p[3]
         print('stmt : RETURN expression SEMICOLON')
+
+    def p_stmt_exp(self, p):
+        'stmt : expression SEMICOLON'
+        p[0] = p[1] + p[2]
+        print('stmt : expression SEMICOLON')
 
     # stmtlist
     def p_stmtlist_stmt(self, p):
@@ -275,6 +354,27 @@ class Parser:
         'stmtlist : stmtlist stmt'
         p[0] = p[1] + p[2]
         print('stmtlist : stmtlist stmt')
+
+    #elseiflist
+    def p_elseiflist_elseif(self, p):
+        'elseiflist : ELSEIF LRB expression RRB stmt'
+        temp = ''
+        for i in range(1, 6):
+            temp += p[i]
+        p[0] = temp
+        print('elseiflist : ELSEIF LRB expression RRB stmt')
+
+    def p_elseiflist_elseiflist(self, p):
+        'elseiflist : elseiflist ELSEIF LRB expression RRB stmt'
+        temp = ''
+        for i in range(1, 7):
+            temp += p[i]
+        p[0] = temp
+        print('elseiflist : elseiflist ELSEIF LRB expression RRB stmt')
+
+    def p_elseiflist_empty(self, p):
+        'elseiflist : empty'
+        print('elseiflist : empty')
 
     # cases
     def p_case(self, p):
@@ -297,9 +397,9 @@ class Parser:
 
     # expilst
     def p_explist_exp(self, p):
-        'explist : exp'
+        'explist : expression'
         p[0] = p[1]
-        print('explist : exp')
+        print('explist : expression')
 
     def p_explist_explist(self, p):
         'explist : explist COMMA expression'
@@ -328,7 +428,7 @@ class Parser:
 
     # Error rule for syntax errors
     def p_error(self, p):
-        print("Syntax error in input! " + p.value )
+        print("Syntax error in input! ", p.value )
 
     def build(self, **kwargs):
         self.parser = yacc.yacc(module=self, **kwargs)
