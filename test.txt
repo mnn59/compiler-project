@@ -1,0 +1,8 @@
+i,j,k[50]:int;
+res2:float;
+
+main() {
+    k[0]=1 ;
+
+
+}

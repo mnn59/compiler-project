@@ -24,6 +24,11 @@ class Parser:
         p[0] = p[1] + p[2] + p[3] + p[4] + p[5]
         print('program : declist MAIN LRB RRB block')
 
+    def p_program_b(self, p):
+        'program : MAIN LRB RRB block'
+        p[0] = p[1] + p[2] + p[3] + p[4]
+        print('program : MAIN LRB RRB block')
+
     # declist 1
     def p_declist_dec(self, p):
         'declist : dec'
@@ -35,16 +40,16 @@ class Parser:
         p[0] = p[1] + p[2]
         print('declist : declist dec')
 
-    # here
-    # def p_declist_empty(self, p):
-    #     'declist : empty'
-    #     print('declist : empty')
-
     # block 1
     def p_block(self, p):
         'block : LCB stmtlist RCB'
         p[0] = p[2]
         print('block : LCB stmtlist RCB')
+
+    def p_block_empty(self, p):
+        'block : LCB RCB'
+        p[0] = p[2]
+        print('block : LCB RCB')
 
     # dec 2
     def p_dec_vardec(self, p):
@@ -98,6 +103,14 @@ class Parser:
         p[0] = temp
         print('stmt : ON LRB expression RRB LCB cases RCB SEMICOLON')
 
+    def p_stmt_on_cases_emsilan(self, p):
+        'stmt : ON LRB expression RRB LCB  RCB SEMICOLON'
+        temp = ''
+        for i in range(1, 8):
+            temp += p[i]
+        p[0] = temp
+        print('stmt : ON LRB expression RRB LCB  RCB SEMICOLON')
+
     def p_stmt_print(self, p):
         'stmt : PRINT LRB ID RRB SEMICOLON'
         p[0] = f'print({p[3]});'
@@ -128,25 +141,56 @@ class Parser:
         p[0] = p[1] + p[2] + p[3] + p[4] + p[5] + p[6] + p[7]
         print('stmt : FOR LRB ID IN ID RRB stmt')
 
-    def p_stmt_if_exp(self, p):
-        'stmt : IF LRB expression RRB stmt elseiflist'
-        p[0] = p[1] + p[2] + p[3] + p[4] + p[5] + p[6]
-        print('stmt : IF LRB expression RRB stmt elseiflist')
+    def p_stmt_if_(self, p):
+        'stmt : IF LRB expression RRB iftoken'
+        p[0] = p[1] + p[2] + p[3] + p[4] + p[5]
+        print('stmt : IF LRB expression RRB iftoken')
 
-    def p_stmt_if_exp_elseiflist(self, p):
-        'stmt : IF LRB expression RRB stmt elseiflist ELSE stmt'
-        p[0] = p[1] + p[2] + p[3] + p[4] + p[5] + p[6] + p[7] + p[8]
-        print('stmt : IF LRB expression RRB stmt elseiflist ELSE stmt')
+    def p_iftoken_smt(self, p):
+        'iftoken : stmt block'
+        p[0] = p[1]
+        print('iftoken : stmt')
+
+    def p_iftoken_smt_elseiflist(self, p):
+        'iftoken : stmt elseiflist'
+        p[0] = p[1] + p[2]
+        print('iftoken : stmt')
+
+    def p_iftoken_smt_else(self, p):
+        'iftoken : stmt ELSE stmt'
+        p[0] = p[1] + p[2] + p[3]
+        print('iftoken : stmt ELSE stmt')
+
+
+    # def p_stmt_if_exp(self, p):
+    #     'stmt : IF LRB expression RRB stmt elseiflist'
+    #     p[0] = p[1] + p[2] + p[3] + p[4] + p[5] + p[6]
+    #     print('stmt : IF LRB expression RRB stmt elseiflist')
+    #
+    # def p_stmt_if_exp_elseiflist(self, p):
+    #     'stmt : IF LRB expression RRB stmt elseiflist ELSE stmt'
+    #     p[0] = p[1] + p[2] + p[3] + p[4] + p[5] + p[6] + p[7] + p[8]
+    #     print('stmt : IF LRB expression RRB stmt elseiflist ELSE stmt')
+    #
+    # def p_stmt_if_exp_empty(self, p):
+    #     'stmt : IF LRB expression RRB stmt'
+    #     p[0] = p[1] + p[2] + p[3] + p[4] + p[5]
+    #     print('stmt : IF LRB expression RRB stmt')
+    #
+    # def p_stmt_if_exp_elseiflist_empty(self, p):
+    #     'stmt : IF LRB expression RRB stmt ELSE stmt'
+    #     p[0] = p[1] + p[2] + p[3] + p[4] + p[5] + p[6] + p[7]
+    #     print('stmt : IF LRB expression RRB stmt ELSE stmt')
 
     # vardec 3
-    def p_vardec(self, p):
-        'vardec : idlist COLON type SEMICOLON'
-        p[0] = p[1] + p[2] + p[3] + p[4]
-        print('vardec : idlist COLON type SEMICOLON')
+    # def p_vardec(self, p):
+    #     'vardec : idlist COLON type SEMICOLON'
+    #     p[0] = p[1] + p[2] + p[3] + p[4]
+    #     print('vardec : idlist COLON type SEMICOLON')
 
     # funcdec 3
     def p_funcdec_type(self, p):
-        'funcdec : FUNCTION LRB idlist RRB COLON type block'
+        'funcdec : FUNCTION LRB elms RRB COLON type block'
         temp = ''
         for i in range(1, 8):
             temp += p[i]
@@ -154,7 +198,7 @@ class Parser:
         print('funcdec : FUNCTION LRB paramdecs RRB COLON type block')
 
     def p_funcdec_id(self, p):
-        'funcdec : FUNCTION ID LRB idlist RRB block'
+        'funcdec : FUNCTION ID LRB elms RRB block'
         temp = ''
         for i in range(1, 7):
             temp += p[i]
@@ -182,6 +226,10 @@ class Parser:
         'case : WHERE factor COLON stmtlist'
         print('case : WHERE factor COLON stmtlist')
 
+    def p_case_empty_stmtlist(self, p):
+        'case : WHERE factor COLON'
+        print('case : WHERE factor COLON')
+
     def p_cases_case(self, p):
         'cases : case'
         p[0] = p[1]
@@ -191,21 +239,21 @@ class Parser:
         'cases : cases case'
         p[0] = p[1] + p[2]
         print('cases : cases case')
+    #
+    # def p_cases_empty(self, p):
+    #     'cases : empty'
+    #     print('cases : empty')
 
-    def p_cases_empty(self, p):
-        'cases : empty'
-        print('cases : empty')
-
-    # idlist 4
-    def p_idlist_iddec(self, p):
-        'idlist : iddec'
-        p[0] = p[1]
-        print('idlist : iddec')
-
-    def p_idlist_comma_iddec(self, p):
-        'idlist : idlist COMMA iddec'
-        p[0] = p[1] + p[2] + p[3]
-        print('idlist : idlist COMMA iddec')
+    # # idlist 4
+    # def p_idlist_iddec(self, p):
+    #     'idlist : iddec'
+    #     p[0] = p[1]
+    #     print('idlist : iddec')
+    #
+    # def p_idlist_comma_iddec(self, p):
+    #     'idlist : idlist COMMA iddec'
+    #     p[0] = p[1] + p[2] + p[3]
+    #     print('idlist : idlist COMMA iddec')
 
     # # paramdecs 4
     # def p_paramdecs_paramdecslist(self, p):
@@ -227,51 +275,71 @@ class Parser:
     #     'paramdecslist : paramdecslist COMMA paramdec'
     #     p[0] = p[1] + p[2] + p[3]
 
-    # iddec 5
-    def p_iddec_id(self, p):
-        'iddec : ID'
-        p[0] = p[1]
-        print('iddec : ID')
+    # # iddec 5
+    # def p_iddec_id(self, p):
+    #     'iddec : ID'
+    #     p[0] = p[1]
+    #     print('iddec : ID')
+    #
+    # def p_iddec_id_exp(self, p):
+    #     'iddec : ID LSB expression RSB'
+    #     p[0] = f'{p[1]}[{p[3]}]'
+    #     print('iddec : ID LSB expression RSB')
+    #
+    # def p_iddec_id_assign_exp(self, p):
+    #     'iddec : ID ASSIGN expression'
+    #     p[0] = p[1] + p[2] + p[3]
+    #     print('iddec : ID ASSIGN expression')
 
-    def p_iddec_id_exp(self, p):
-        'iddec : ID LSB expression RSB'
-        p[0] = f'{p[1]}[{p[3]}]'
-        print('iddec : ID LSB expression RSB')
-
-    def p_iddec_id_assign_exp(self, p):
-        'iddec : ID ASSIGN expression'
-        p[0] = p[1] + p[2] + p[3]
-        print('iddec : ID ASSIGN expression')
-
-    # lvalue
-    def p_id_exp(self, p):
-        'lvalue : ID'
-        p[0] = p[1]
-        print('lvalue : ID')
-
+    # # lvalue
+    # def p_id_exp(self, p):
+    #     'lvalue : ID'
+    #     p[0] = p[1]
+    #     print('lvalue : ID')
+    #
     # def p_id_sb(self, p):
     #     'lvalue : ID LSB expression RSB'
     #     p[0] = p[2]
     #     print('lvalue : LSB ID RSB')
-
-    def p_id_sb_assign(self, p):
-        'lvalue : ID LSB expression RSB ASSIGN expression'
-        temp = ''
-        for i in range(1, 7):
-            temp += p[i]
-        p[0] = temp
-        print('lvalue : ID LSB expression RSB ASSIGN expression')
+    #
+    # def p_id_sb_assign(self, p):
+    #     'lvalue : ID LSB expression RSB ASSIGN expression'
+    #     temp = ''
+    #     for i in range(1, 7):
+    #         temp += p[i]
+    #     p[0] = temp
+    #     print('lvalue : ID LSB expression RSB ASSIGN expression')
 
     # collect
-    def p_collect_id(self, p):
-        'collect : ID'
+    def p_elm_id(self, p):
+        'elm : ID'
         p[0] = p[1]
-        print('collect : ID')
+        print()
 
-    def p_collect_sb(self, p):
-        'collect : ID LSB expression RSB'
-        p[0] = p[2]
-        print('lvalue : LSB ID RSB')
+    def p_elm_id_sb(self, p):
+        'elm : ID LSB expression RSB'
+
+
+    def p_elm_id_assign(self, p):
+        'elm : ID ASSIGN expression'
+
+    def p_elms_elm(self, p):
+        'elms : elm'
+
+    def p_elms_elms_elm(self, p):
+        'elms : elms COMMA elm'
+
+    # def p_explist_elms_id(self, p):
+    #     'explist : elms COMMA ID LSB expression RSB ASSIGN expression'
+
+    # def p_explist_elms(self, p):
+    #     'explist : elms'
+
+    def p_exp_id_assign(self,p):
+        'expression : ID LSB expression RSB ASSIGN expression'
+
+    def p_vardec(self, p):
+        'vardec : elms COLON type SEMICOLON'
 
     # # paramdec 6
     # def p_paramdec_id(self, p):
@@ -312,10 +380,6 @@ class Parser:
         p[0] = temp
         print('elseiflist : elseiflist ELSEIF LRB expression RRB stmt')
 
-    def p_elseiflist_empty(self, p):
-        'elseiflist : empty'
-        print('elseiflist : empty')
-
 
     # relop
     def p_relop_exp_eq(self, p):
@@ -349,18 +413,23 @@ class Parser:
         print('expression : expression NE expression')
 
     # exp
-    def p_exp_val(self, p):
-        'expression : lvalue'
-        # p[0] = p[1]
-        print('expression : lvalue')
+    # def p_exp_val(self, p):
+    #     'expression : lvalue'
+    #     # p[0] = p[1]
+    #     print('expression : lvalue')
 
-    def p_exp_val_exp(self, p):
-        'expression : lvalue ASSIGN expression'
-        # p[0] = p[1]
-        print('expression : lvalue')
+    # def p_exp_val_exp(self, p):
+    #     'expression : lvalue ASSIGN expression'
+    #     # p[0] = p[1]
+    #     print('expression : lvalue')
 
     def p_exp_id_bracket_exp(self, p):
         'expression : ID LRB explist RRB'
+        p[0] = f'{p[1]}({p[3]})'
+        print('expression : ID LRB explist RRB')
+
+    def p_exp_id_bracket_elms(self, p):
+        'expression : ID LRB elms RRB'
         p[0] = f'{p[1]}({p[3]})'
         print('expression : ID LRB explist RRB')
 
@@ -453,11 +522,6 @@ class Parser:
         'factor : LRB expression RRB'
         p[0] = p[2]
         print('factor : LRB expression RRB')
-
-    def p_empty(self, p):
-        'empty :'
-        print('empty :')
-        pass
 
 
 
