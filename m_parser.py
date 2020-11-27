@@ -110,6 +110,8 @@ class Parser:
 
     def p_stmt_exp(self, p):
         'stmt : expression SEMICOLON'
+        print(p[1])
+        print(p[2])
         p[0] = p[1] + p[2]
         print('stmt : expression SEMICOLON')
 
@@ -135,11 +137,6 @@ class Parser:
         'stmt : IF LRB expression RRB stmt elseiflist ELSE stmt'
         p[0] = p[1] + p[2] + p[3] + p[4] + p[5] + p[6] + p[7] + p[8]
         print('stmt : IF LRB expression RRB stmt elseiflist ELSE stmt')
-
-    def p_exp_not_exp(self, p):
-        'expression : NOT expression'
-        p[0] = p[1] + p[2]
-        print('expression : NOT expression')
 
     # vardec 3
     def p_vardec(self, p):
@@ -195,9 +192,9 @@ class Parser:
         p[0] = p[1] + p[2]
         print('cases : cases case')
 
-    # def p_cases_empty(self, p):
-    #     'cases : empty'
-    #     print('cases : empty')
+    def p_cases_empty(self, p):
+        'cases : empty'
+        print('cases : empty')
 
     # idlist 4
     def p_idlist_iddec(self, p):
@@ -208,7 +205,6 @@ class Parser:
     def p_idlist_comma_iddec(self, p):
         'idlist : idlist COMMA iddec'
         p[0] = p[1] + p[2] + p[3]
-        print(p[0])
         print('idlist : idlist COMMA iddec')
 
     # # paramdecs 4
@@ -246,6 +242,36 @@ class Parser:
         'iddec : ID ASSIGN expression'
         p[0] = p[1] + p[2] + p[3]
         print('iddec : ID ASSIGN expression')
+
+    # lvalue
+    def p_id_exp(self, p):
+        'lvalue : ID'
+        p[0] = p[1]
+        print('lvalue : ID')
+
+    # def p_id_sb(self, p):
+    #     'lvalue : ID LSB expression RSB'
+    #     p[0] = p[2]
+    #     print('lvalue : LSB ID RSB')
+
+    def p_id_sb_assign(self, p):
+        'lvalue : ID LSB expression RSB ASSIGN expression'
+        temp = ''
+        for i in range(1, 7):
+            temp += p[i]
+        p[0] = temp
+        print('lvalue : ID LSB expression RSB ASSIGN expression')
+
+    # collect
+    def p_collect_id(self, p):
+        'collect : ID'
+        p[0] = p[1]
+        print('collect : ID')
+
+    def p_collect_sb(self, p):
+        'collect : ID LSB expression RSB'
+        p[0] = p[2]
+        print('lvalue : LSB ID RSB')
 
     # # paramdec 6
     # def p_paramdec_id(self, p):
@@ -286,21 +312,10 @@ class Parser:
         p[0] = temp
         print('elseiflist : elseiflist ELSEIF LRB expression RRB stmt')
 
-    # def p_elseiflist_empty(self, p):
-    #     'elseiflist : empty'
-    #     print('elseiflist : empty')
+    def p_elseiflist_empty(self, p):
+        'elseiflist : empty'
+        print('elseiflist : empty')
 
-
-    # lvalue
-    def p_id_exp(self, p):
-        'lvalue : ID'
-        p[0] = p[1]
-        print('lvalue : ID')
-
-    def p_id_SB(self, p):
-        'lvalue : ID LSB expression RSB'
-        p[0] = p[2]
-        print('lvalue : LSB ID RSB')
 
     # relop
     def p_relop_exp_eq(self, p):
@@ -334,6 +349,41 @@ class Parser:
         print('expression : expression NE expression')
 
     # exp
+    def p_exp_val(self, p):
+        'expression : lvalue'
+        # p[0] = p[1]
+        print('expression : lvalue')
+
+    def p_exp_val_exp(self, p):
+        'expression : lvalue ASSIGN expression'
+        # p[0] = p[1]
+        print('expression : lvalue')
+
+    def p_exp_id_bracket_exp(self, p):
+        'expression : ID LRB explist RRB'
+        p[0] = f'{p[1]}({p[3]})'
+        print('expression : ID LRB explist RRB')
+
+    def p_exp_id__bracket(self, p):
+        'expression : ID LRB RRB'
+        p[0] = f'{p[1]}()'
+        print('expression : ID LRB RRB')
+
+    def p_exp_minus_exp(self, p):
+        'expression : SUB expression'
+        p[0] = f'- {p[2]}'
+        print('expression : SUB expression')
+
+    # def p_exp_bracket_exp(self, p):
+    #     'expression : LRB expression RRB'
+    #     p[0] = f'({p[2]})'
+    #     print('expression : LRB expression RRB')
+
+    def p_exp_not_exp(self, p):
+        'expression : NOT expression'
+        p[0] = p[1] + p[2]
+        print('expression : NOT expression')
+
     def p_expression_plus(self, p):
         'expression : expression SUM term'
         p[0] = p[1] + p[3]
@@ -404,18 +454,23 @@ class Parser:
         p[0] = p[2]
         print('factor : LRB expression RRB')
 
-    # def p_empty(self, p):
-    #     'empty :'
-    #     print('empty :')
-    #     pass
+    def p_empty(self, p):
+        'empty :'
+        print('empty :')
+        pass
 
 
 
     precedence = (
-        ('left', 'EQ', 'NE', 'GE', 'LE', 'GT', 'LT'),
-        ('left', 'AND', 'OR'),
+        ('left', 'COMMA'),
+        ('right', 'ASSIGN'),
+        ('left', 'OR'),
+        ('left', 'AND'),
+        ('left', 'EQ', 'NE'),
+        ('left', 'GT', 'LT', 'GE', 'LE'),
         ('left', 'SUM', 'SUB'),
         ('left', 'MUL', 'DIV', 'MOD'),
+        ('right', 'NOT'),
     )
 
 
@@ -429,3 +484,7 @@ class Parser:
     def build(self, **kwargs):
         self.parser = yacc.yacc(module=self, **kwargs)
         return self.parser
+
+    # ===============================================================
+
+
