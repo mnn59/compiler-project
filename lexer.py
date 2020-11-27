@@ -3,6 +3,7 @@ from ply.lex import TOKEN
 
 
 class Lexer:
+    # LRB: ( , RRB: ) , LCB: { , RCB: } , LT: < , GT: >
     tokens = [
         'ID', 'INTEGERNUMBER', 'FLOATNUMBER', 'INTEGER', 'FLOAT',
         'BOOLEAN', 'FUNCTION', 'TRUE', 'FALSE', 'PRINT', 'RETURN',
@@ -43,11 +44,15 @@ class Lexer:
         'where': "WHERE",
     }
 
+    # Todo eof  The lexpos attribute is reset so be aware of that if you're using it in error reporting.
+    # Todo the order of definition of tokens should be edited
+
     # RESERVED KEYWORD
     t_IF = r'if'
     t_WHILE = r'while'
     t_PRINT = r'print'
 
+    # amir.haf76: start defining new tokens
     t_EQ = r'\=\='
     t_GE = r'\>='
     t_LE = r'\<='
@@ -56,13 +61,15 @@ class Lexer:
     t_GT = r'\>'
     t_LT = r'\<'
 
-    # COLONS, OPERATORS, BRACKETS
+    # COLONS, OPERATOR, BRACKETS
     t_SEMICOLON = r'\;'
     t_COLON = r'\:'
     t_COMMA = r'\,'
 
     literals = ['{', '}', '(', ')', '[', ']',
                 '*', '/', '%', '+', '-']
+
+    # amir.haf76: end defining new tokens
 
     # amir.haf76: adding float number, float number should be upper than integer number!!
     def t_FLOATNUMBER(self, t):
@@ -72,15 +79,13 @@ class Lexer:
 
     def t_INTEGERNUMBER(self, t):
         # r'[0-9]{1,9}'
-        r'(?<!(?:\d))[\+\-]?\d{1,9}(?!\w|[.])'
+        r'(?<!(?:\d|\w))[\+\-]?\d{1,9}(?!\w|[.])'
         t.value = int(t.value)
         return t
 
     def t_ID(self, t):
-        # We have to put True and False here because their first character is Capital and won't be checked in
-        # reserved list, so we should add them manually
-        # Also we could define 2 methods for True and false but we did not do that
         r'[a-z_][a-zA-Z0-9_]*|True|False'
+
         if t.value in self.reserved:
             t.type = self.reserved[t.value]
         return t
@@ -98,17 +103,17 @@ class Lexer:
     # NOTE: t.value = lexeme  t.type = token
     # NOTE: it must be lower case 'error' not 'ERROR'
 
-    # error handling
     err_sign = r'(?:\*|\/|\+|\-|\%)(?:(?:\s+)?(?:\*|\/|\+|\-|\%))+'
     err_id = r'(?:[0-9]+)?[a-zA-Z_][a-zA-Z0-9_]*'
+    # err_num = r'\.?(?:\d+\.)(?:\d+\.)+(?:\d+)?|(?:\d+\.)(?!\d+)|(?<!\d)(?:\.\d+)(?!\d+)'
     err_num = r'(?:\w+|\d+|\.)+'
     err_genr = err_sign + r'|' + err_num + r'|' + err_id
-
     @TOKEN(err_genr)
     def t_ERROR(self, t):
+
         return t
 
-    # amir.haf76: I added this part for changing name and defining elements in literal list
+    # amir.haf76: I added this part for changing name
     def t_LCB(self, t):
         r'\{'
         t.type = 'LCB'
@@ -172,3 +177,7 @@ class Lexer:
     def build(self, **kwargs):
         self.lexer = lex.lex(self, **kwargs)
         return self.lexer
+
+# issues:
+# 1. 002 --> 2
+# 2. 2+3 --> 2 + 3
