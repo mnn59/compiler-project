@@ -16,15 +16,111 @@ class Parser:
         # p[0] = p[1]
         print('program : expression')
 
-    def p_program_val(self, p):
+    # declist
+    def p_declist_dec(self, p):
+        'declist : dec'
+        p[0] = p[1]
+        print('declist : dec')
+
+    def p_declist_declist_dec(self, p):
+        'declist : declist dec'
+        p[0] = p[1] + p[2]
+        print('declist : declist dec')
+
+    def p_declist_empty(self, p):
+        'declist : empty'
+        print('declist : empty')
+
+    # dec
+    def p_dec_vardec(self, p):
+        'dec : vardec'
+        p[0] = p[1]
+        print('dec : vardec')
+
+    def p_dec_funcdec(self, p):
+        'dec : funcdec'
+        p[0] = p[1]
+        print('dec : funcdec')
+
+    # type
+    def p_type_int(self, p):
+        'type : INTEGER'
+        p[0] = p[1]
+        print('type : INTEGER')
+
+    def p_type_float(self, p):
+        'type : FLOAT'
+        p[0] = p[1]
+        print('type : FLOAT')
+
+    def p_type_bool(self, p):
+        'type : BOOLEAN'
+        p[0] = p[1]
+        print('type : BOOLEAN')
+
+    # iddec
+    def p_iddec_id(self, p):
+        'iddec : ID'
+        p[0] = p[1]
+        print('iddec : ID')
+
+    def p_iddec_id_exp(self, p):
+        'iddec : ID LSB expression RSB'
+        p[0] = f'{p[1]}[{p[3]}]'
+        print('iddec : ID LSB expression RSB')
+    def p_iddec_id_assign_exp(self, p):
+        'iddec : ID ASSIGN expression'
+        p[0] = f'{p[1]}={p[3]}'
+        print('iddec : ID ASSIGN expression')
+
+    # idlist
+    def p_idlist_iddec(self, p):
+        'idlist : iddec'
+        p[0] = p[1]
+        print('idlist : iddec')
+
+    def p_idlist_comma_iddec(self, p):
+        'idlist : idlist COMMA iddec'
+        p[0] = f'{p[1]},{p[3]}'
+        print('idlist : idlist COMMA iddec')
+
+
+
+    # exp
+    def p_exp_val(self, p):
         'expression : lvalue'
         # p[0] = p[1]
         print('expression : lvalue')
 
-    def p_program_val_exp(self, p):
+    def p_exp_val_exp(self, p):
         'expression : lvalue ASSIGN expression'
         # p[0] = p[1]
         print('expression : lvalue')
+
+    def p_exp_id_bracket_exp(self, p):
+        'expression : ID LRB explist RRB'
+        p[0] = f'{p[1]}({p[3]})'
+        print('expression : ID LRB explist RRB')
+
+    def p_exp_id__bracket(self, p):
+        'expression : ID LRB RRB'
+        p[0] = f'{p[1]}()'
+        print('expression : ID LRB RRB')
+
+    def p_exp_minus_exp(self, p):
+        'expression : SUB expression'
+        p[0] = f'- {p[2]}'
+        print('expression : SUB expression')
+
+    def p_exp_bracket_exp(self, p):
+        'expression : LRB expression RRB'
+        p[0] = f'({p[2]})'
+        print('expression : LRB expression RRB')
+
+    def p_exp_not_exp(self, p):
+        'expression : NOT expression'
+        p[0] = p[1] + p[2]
+        print('expression : NOT expression')
 
     def p_expression_plus(self, p):
         'expression : expression SUM term'
@@ -35,6 +131,16 @@ class Parser:
         'expression : expression SUB term'
         p[0] = p[1] - p[3]
         print('expression : expression SUB term')
+
+    def p_expression_and(self, p):
+        'expression : expression AND term'
+        p[0] = p[1] & p[3]
+        print('expression : expression AND term')
+
+    def p_expression_or(self, p):
+        'expression : expression OR term'
+        p[0] = p[1] | p[3]
+        print('expression : expression OR term')
 
     def p_expression_term(self, p):
         'expression : term'
@@ -51,15 +157,25 @@ class Parser:
         p[0] = p[1] / p[3]
         print('term : term DIV factor')
 
+    def p_term_MOD(self, p):
+        'term : term MOD factor'
+        p[0] = p[1] % p[3]
+        print('term : term MOD factor')
+
     def p_term_factor(self, p):
         'term : factor'
         p[0] = p[1]
         print('term : factor')
-    #
+
     def p_factor_num(self, p):
         'factor : INTEGERNUMBER'
         p[0] = p[1]
         print('factor : INTEGERNUMBER')
+
+    def p_factor_float(self, p):
+        'factor : FLOATNUMBER'
+        p[0] = p[1]
+        print('factor : FLOATNUMBER')
 
     def p_factor_true(self, p):
         'factor : TRUE'
@@ -76,6 +192,7 @@ class Parser:
         p[0] = p[2]
         print('factor : LRB expression RRB')
 
+    # relop
     def p_relop_exp_eq(self, p):
         'expression : expression EQ expression'
         p[0] = p[1] == p[3]
@@ -111,6 +228,7 @@ class Parser:
         p[0] = p[1] != p[3]
         print('expression : expression NE expression')
 
+    # lvalue
     def p_id_exp(self, p):
         'lvalue : ID'
         p[0] = p[1]
@@ -121,11 +239,13 @@ class Parser:
         p[0] = p[2]
         print('lvalue : LSB ID RSB')
 
+    # block
     def p_block(self, p):
         'block : LCB stmtlist RCB'
         p[0] = p[2]
         print('block : LCB stmtlist RCB')
 
+    # stmt
     def p_stmt_block(self, p):
         'stmt : block'
         p[0] = p[1]
@@ -141,6 +261,7 @@ class Parser:
         p[0] = p[2]
         print('stmt : RETURN expression SEMICOLON')
 
+    # stmtlist
     def p_stmtlist_stmt(self, p):
         'stmtlist : stmt'
         p[0] = p[1]
@@ -155,6 +276,7 @@ class Parser:
         p[0] = p[1] + p[2]
         print('stmtlist : stmtlist stmt')
 
+    # cases
     def p_case(self, p):
         'case : WHERE factor COLON stmtlist'
         print('case : WHERE factor COLON stmtlist')
@@ -173,6 +295,7 @@ class Parser:
         'cases : empty'
         print('cases : empty')
 
+    # expilst
     def p_explist_exp(self, p):
         'explist : exp'
         p[0] = p[1]
@@ -197,6 +320,7 @@ class Parser:
 
     precedence = (
         ('left', 'EQ', 'NE', 'GE', 'LE', 'GT', 'LT'),
+        ('left', 'AND', 'OR'),
         ('left', 'SUM', 'SUB'),
         ('left', 'MUL', 'DIV'),
     )
