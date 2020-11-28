@@ -10,8 +10,8 @@ while True:
     tok = lexer.token()
     if not tok:  # EOF(end of file)
         break
-    print(tok)
-print(f'{30*"="}')
+    # print(tok)
+# print(f'{30*"="}')
 p = Parser()
 p.build().parse(text_input, lexer, False)
 

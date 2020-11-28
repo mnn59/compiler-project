@@ -112,7 +112,7 @@ class Parser:
     def p_stmt_exp(self, p):
         'stmt : expression SEMICOLON'
         p[0] = p[1] + p[2]
-        print('stmt : expression SEMICOLON', p[0])
+        print('stmt : expression SEMICOLON')
 
     def p_stmt_for_exp(self, p):
         'stmt : FOR LRB expression SEMICOLON expression SEMICOLON expression RRB stmt'
@@ -130,27 +130,22 @@ class Parser:
     def p_stmt_if(self, p):
         'stmt : IF LRB expression RRB stmt %prec SHIFT_IF'
         p[0] = p[1] + p[2] + p[3] + p[4] + p[5]
-        print('stmt : IF LRB expression RRB elseiflist')
+        print('stmt : IF LRB expression RRB stmt')
 
     def p_stmt_if_2(self, p):
         'stmt : IF LRB expression RRB stmt ELSE stmt %prec SHIFT_IFELSE'
         p[0] = p[1] + p[2] + p[3] + p[4] + p[5] + p[6] + p[7]
-        print('stmt : IF LRB expression RRB elseiflist')
+        print('stmt : IF LRB expression RRB stmt ELSE stmt')
 
     def p_stmt_if_3(self, p):
-        'stmt : IF LRB expression RRB elseiflist %prec SHIFT_ELSEIFLIST'
+        'stmt : IF LRB expression RRB stmt elseiflist %prec SHIFT_ELSEIFLIST'
         p[0] = p[1] + p[2] + p[3] + p[4] + p[5]
-        print('stmt : IF LRB expression RRB elseiflist')
+        print('stmt : IF LRB expression RRB stmt elseiflist')
 
     def p_stmt_if_4(self, p):
-        'stmt : IF LRB expression RRB elseiflist ELSE stmt %prec SHIFT_ELSEIFLIST'
+        'stmt : IF LRB expression RRB stmt elseiflist ELSE stmt %prec SHIFT_ELSEIFLIST2'
         p[0] = p[1] + p[2] + p[3] + p[4] + p[5] + p[6] + p[7]
-        print('stmt : IF LRB expression RRB elseiflist')
-
-    # def p_stmt_if_2(self, p):
-    #     'stmt : IF LRB expression RRB elseiflist ELSE stmt %prec SHIFT_VARDEC'
-    #     p[0] = p[1] + p[2] + p[3] + p[4] + p[5]
-    #     print('stmt : IF LRB expression RRB elseiflist ELSE stmt')
+        print('stmt : IF LRB expression RRB stmt elseiflist ELSE stmt')
 
     # elseiflist
     def p_elseiflist_elseif(self, p):
@@ -162,58 +157,12 @@ class Parser:
         print('elseiflist : ELSEIF LRB expression RRB stmt')
 
     def p_elseiflist_elseiflist(self, p):
-        'elseiflist : elseiflist ELSEIF LRB expression RRB stmt'
+        'elseiflist : elseiflist ELSEIF LRB expression RRB stmt %prec SHIFT_IFLOOP'
         temp = ''
         for i in range(1, 7):
             temp += p[i]
         p[0] = temp
-        print('elseiflist : elseiflist ELSEIF LRB expression RRB stmt')
-
-
-    # def p_iftoken_smt(self, p):
-    #     'iftoken : stmt emptyif %prec SHIFT_VARDEC'
-    #     p[0] = p[1]
-    #     print('iftoken : stmt')
-    #
-    # def p_iftoken_smt_elseiflist(self, p):
-    #     'iftoken : stmt ELSEIF elseiflist'
-    #     p[0] = p[1] + p[2] + p[3]
-    #     print('iftoken : stmt')
-    #
-    # def p_iftokcen_smt_elseiflist_else(self, p):
-    #     'iftoken : stmt ELSEIF elseiflist ELSE stmt'
-    #     p[0] = p[1] + p[2] + p[3] + p[4] + p[5]
-    #     print('iftoken : stmt')
-    #
-    # def p_iftoken_smt_else(self, p):
-    #     'iftoken : stmt ELSE stmt'
-    #     p[0] = p[1] + p[2] + p[3]
-    #     print('iftoken : stmt ELSE stmt')
-
-    # def p_emptyif(self, p):
-    #     'emptyif : '
-    #     pass
-
-
-    # def p_stmt_if_exp(self, p):
-    #     'stmt : IF LRB expression RRB stmt elseiflist'
-    #     p[0] = p[1] + p[2] + p[3] + p[4] + p[5] + p[6]
-    #     print('stmt : IF LRB expression RRB stmt elseiflist')
-    #
-    # def p_stmt_if_exp_elseiflist(self, p):
-    #     'stmt : IF LRB expression RRB stmt elseiflist ELSE stmt'
-    #     p[0] = p[1] + p[2] + p[3] + p[4] + p[5] + p[6] + p[7] + p[8]
-    #     print('stmt : IF LRB expression RRB stmt elseiflist ELSE stmt')
-    #
-    # def p_stmt_if_exp_empty(self, p):
-    #     'stmt : IF LRB expression RRB stmt'
-    #     p[0] = p[1] + p[2] + p[3] + p[4] + p[5]
-    #     print('stmt : IF LRB expression RRB stmt')
-    #
-    # def p_stmt_if_exp_elseiflist_empty(self, p):
-    #     'stmt : IF LRB expression RRB stmt ELSE stmt'
-    #     p[0] = p[1] + p[2] + p[3] + p[4] + p[5] + p[6] + p[7]
-    #     print('stmt : IF LRB expression RRB stmt ELSE stmt')
+        print('elseiflist : elseiflist ELSEIF LRB expression RRB stmt %prec SHIFT_IFLOOP')
 
     # vardec 3
     def p_vardec(self, p):
@@ -236,7 +185,7 @@ class Parser:
         for i in range(1, 7):
             temp += p[i]
         p[0] = temp
-        print('funcdec : FUNCTION LRB RRB COLON type block')
+        print('funcdec : FUNCTION ID LRB RRB COLON type block')
 
     def p_funcdec_id(self, p):
         'funcdec : FUNCTION ID LRB paramdecslist RRB block'
@@ -292,10 +241,6 @@ class Parser:
             print(p[i])
         p[0] = p[1] + p[2]
         print('cases : cases case')
-    #
-    # def p_cases_empty(self, p):
-    #     'cases : empty'
-    #     print('cases : empty')
 
     # idlist 4
     def p_idlist_iddec(self, p):
@@ -308,16 +253,6 @@ class Parser:
         p[0] = p[1] + p[2] + p[3]
         print('idlist : idlist COMMA iddec')
 
-    # # paramdecs 4
-    # def p_paramdecs_paramdecslist(self, p):
-    #     'paramdecs : paramdecslist'
-    #     p[0] = p[1]
-    #     print('paramdecs : paramdecslist')
-    # # here
-    # def p_paramdecs_empty(self, p):
-    #     'paramdecs : empty'
-    #     print('paramdecs : empty')
-
     # paramdecslist 5
     def p_paramdecslist_paramdec(self, p):
         'paramdecslist : paramdec'
@@ -327,7 +262,6 @@ class Parser:
     def p_paramdecslist_comma_paramdec(self, p):
         'paramdecslist : paramdecslist COMMA paramdec'
         p[0] = p[1] + p[2] + p[3]
-        print(p[0])
         print('paramdecslist : paramdecslist COMMA paramdec')
 
     # iddec 5
@@ -339,7 +273,7 @@ class Parser:
     def p_iddec_id_exp(self, p):
         'iddec : ID LSB expression RSB'
         p[0] = p[1] + p[2] + p[3] + p[4]
-        print('iddec : ID LSB expression RSB', p[0])
+        print('iddec : ID LSB expression RSB')
 
     def p_iddec_id_assign_exp(self, p):
         'iddec : ID ASSIGN expression %prec SHIFT_IDDEC'
@@ -365,7 +299,7 @@ class Parser:
     def p_exp_id_assign(self,p):
         'expression : ID ASSIGN expression %prec SHIFT_ASSIGN'
         p[0] = p[1] + p[2] + p[3]
-        print('expression : ID ASSIGN expression %prec SHIFT_ASSIGN')
+        print('expression : ID ASSIGN expression ')
 
     # paramdec 6
     def p_paramdec_id(self, p):
@@ -386,11 +320,8 @@ class Parser:
 
     def p_explist_explist(self, p):
         'explist : explist COMMA expression'
-        p[0] = f'{p[1]},{p[3]}'
+        p[0] = p[1] + p[2] + p[3]
         print('explist : explist COMMA expression')
-
-
-
 
     # relop
     def p_relop_exp_eq(self, p):
@@ -432,7 +363,7 @@ class Parser:
     def p_expression_val_exp(self, p):
         'expression : lvalue ASSIGN expression'
         p[0] = p[1] + p[2] + p[3]
-        print('expression : lvalue ASSIGN expression', p[0])
+        print('expression : lvalue ASSIGN expression')
 
     def p_expression_id_bracket_exp(self, p):
         'expression : ID LRB explist RRB'
@@ -448,11 +379,6 @@ class Parser:
         'expression : SUB expression'
         p[0] = p[1] + p[2]
         print('expression : SUB expression')
-
-    # def p_exp_bracket_exp(self, p):
-    #     'expression : LRB expression RRB'
-    #     p[0] = f'({p[2]})'
-    #     print('expression : LRB expression RRB')
 
     def p_expression_not_exp(self, p):
         'expression : NOT expression'
@@ -479,27 +405,22 @@ class Parser:
         p[0] = p[1] + p[2] + p[3]
         print('expression : expression OR expression')
 
-    # def p_expression_term(self, p):
-    #     'expression : term'
-    #     p[0] = p[1]
-    #     print('expression : term')
-
-    def p_term_times(self, p):
+    def p_expression_times(self, p):
         'expression : expression MUL expression'
         p[0] = p[1] + p[2] + p[3]
         print('expression : expression MUL expression')
 
-    def p_term_div(self, p):
+    def p_expression_div(self, p):
         'expression : expression DIV expression'
         p[0] = p[1] + p[2] + p[3]
         print('expression : expression DIV expression')
 
-    def p_term_MOD(self, p):
+    def p_expression_MOD(self, p):
         'expression : expression MOD expression'
         p[0] = p[1] + p[2] + p[3]
         print('expression : expression MOD expression')
 
-    def p_term_factor(self, p):
+    def p_expression_factor(self, p):
         'expression : factor'
         p[0] = p[1]
         print('expression : factor')
@@ -535,8 +456,8 @@ class Parser:
         ('left', 'SHIFT_IF'),
         ('left', 'SHIFT_IFELSE'),
         ('left', 'SHIFT_ELSEIFLIST'),
-        # ('left', 'SHIFT_ELSEIF'),
-        # ('left', 'SHIFT_VARDEC'),
+        ('left', 'SHIFT_ELSEIFLIST2'),
+        ('left', 'SHIFT_IFLOOP'),
         ('left', 'SHIFT_LVALUE'),
         ('left', 'SHIFT_IDDEC'),
         ('left', 'SHIFT_ASSIGN'),
@@ -553,7 +474,6 @@ class Parser:
         ('left', 'MUL', 'DIV', 'MOD'),
         ('right', 'NOT'),
     )
-
 
     # Error rule for syntax errors
     def p_error(self, p):
