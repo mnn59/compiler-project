@@ -10,21 +10,12 @@ class Parser:
         pass
 
         # Yacc example
-    #test
-    # def p_program(self, p):
-    #     'program : expression'
-    #     print('program : expression')
-    #
-    # def p_program_e(self, p):
-    #     'program : declist'
-    #     print('program : declist')
-
-    def p_program_a(self, p):
+    def p_program_declist(self, p):
         'program : declist MAIN LRB RRB block'
         p[0] = p[1] + p[2] + p[3] + p[4] + p[5]
         print('program : declist MAIN LRB RRB block')
 
-    def p_program_b(self, p):
+    def p_program(self, p):
         'program : MAIN LRB RRB block'
         p[0] = p[1] + p[2] + p[3] + p[4]
         print('program : MAIN LRB RRB block')
@@ -48,7 +39,7 @@ class Parser:
 
     def p_block_empty(self, p):
         'block : LCB RCB'
-        p[0] = p[2]
+        p[0] = p[1] + p[2]
         print('block : LCB RCB')
 
     # dec 2
@@ -59,6 +50,7 @@ class Parser:
 
     def p_dec_funcdec(self, p):
         'dec : funcdec'
+        p[0] = p[1]
         print('dec : funcdec')
 
     # stmtlist 2
@@ -66,10 +58,6 @@ class Parser:
         'stmtlist : stmt'
         p[0] = p[1]
         print('stmtlist : stmt')
-
-    # def p_stmtlist_empty(self, p):
-    #     'stmtlist : empty'
-    #     print('stmtlist : empty')
 
     def p_stmtlist_stmtlist(self, p):
         'stmtlist : stmtlist stmt'
@@ -123,8 +111,6 @@ class Parser:
 
     def p_stmt_exp(self, p):
         'stmt : expression SEMICOLON'
-        print(p[1])
-        print(p[2])
         p[0] = p[1] + p[2]
         print('stmt : expression SEMICOLON')
 
@@ -147,19 +133,23 @@ class Parser:
         print('stmt : IF LRB expression RRB iftoken')
 
     def p_iftoken_smt(self, p):
-        'iftoken : stmt block'
+        'iftoken : stmt emptyif'
         p[0] = p[1]
         print('iftoken : stmt')
 
     def p_iftoken_smt_elseiflist(self, p):
-        'iftoken : stmt elseiflist'
-        p[0] = p[1] + p[2]
+        'iftoken : stmt ELSEIF elseiflist'
+        p[0] = p[1] + p[2] + p[3]
         print('iftoken : stmt')
 
     def p_iftoken_smt_else(self, p):
         'iftoken : stmt ELSE stmt'
         p[0] = p[1] + p[2] + p[3]
         print('iftoken : stmt ELSE stmt')
+
+    def p_emptyif(self, p):
+        'emptyif : '
+        pass
 
 
     # def p_stmt_if_exp(self, p):
@@ -318,16 +308,23 @@ class Parser:
 
     def p_elm_id_sb(self, p):
         'elm : ID LSB expression RSB'
-
+        p[0] = p[1] + p[2] + p[3] + p[4]
+        print('elm : ID LSB expression RSB')
 
     def p_elm_id_assign(self, p):
         'elm : ID ASSIGN expression'
+        p[0] = p[1] + p[2] + p[3]
+        print('elm : ID ASSIGN expression')
 
     def p_elms_elm(self, p):
         'elms : elm'
+        p[0] = p[1]
+        print('elms : elm')
 
     def p_elms_elms_elm(self, p):
         'elms : elms COMMA elm'
+        p[0] = p[1] + p[2] + p[3]
+        print('elms : elms COMMA elm')
 
     # def p_explist_elms_id(self, p):
     #     'explist : elms COMMA ID LSB expression RSB ASSIGN expression'
@@ -337,9 +334,13 @@ class Parser:
 
     def p_exp_id_assign(self,p):
         'expression : ID LSB expression RSB ASSIGN expression'
+        p[0] = p[1] + p[2] + p[3] + p[4] + p[5] + p[6]
+        print('expression : ID LSB expression RSB ASSIGN expression')
 
     def p_vardec(self, p):
         'vardec : elms COLON type SEMICOLON'
+        p[0] = p[1] + p[2] + p[3] + p[4]
+        print('vardec : elms COLON type SEMICOLON')
 
     # # paramdec 6
     # def p_paramdec_id(self, p):
@@ -526,6 +527,8 @@ class Parser:
 
 
     precedence = (
+        ('left', 'ELSE'),
+        ('left', 'ELSEIF'),
         ('left', 'COMMA'),
         ('right', 'ASSIGN'),
         ('left', 'OR'),
